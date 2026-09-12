@@ -326,7 +326,7 @@ class Component extends DCLogic {
       marks.push({ kind: 'h', d: this.hlPath(x, this.lineY(li), w, 7.4, r) });
       if (e[1] === 'i') marks.push({ kind: 'b', d: this.tickPath(170, this.lineY(li) - 1, r) });
       if (seenLi[li]) return; seenLi[li] = true;
-      labels.push({
+      false && labels.push({
         li, x, t: e[1] === 'i'
           ? 'inferred · ' + (e[5] || 1) + ' hop · ' + (e[3] || 0).toFixed(2)
           : (e[5] || 'confirmed') + ' · line ' + (li + 1),
