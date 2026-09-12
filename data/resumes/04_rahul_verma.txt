@@ -1,0 +1,17 @@
+Rahul Verma
+rahul.verma@email.com | linkedin.com/in/rahulverma
+
+Education
+B.Tech Mechanical Engineering, NIT Trichy, 2022 - 2026
+
+Experience
+Research Intern, Thermal Systems Lab, Jun 2025 - Jul 2025
+- Simulated heat exchanger performance in MATLAB and ANSYS
+- Prepared technical reports and presented weekly findings
+
+Projects
+- Designed a solar dryer prototype using SolidWorks
+- Python script to automate data logging from lab sensors
+
+Skills
+MATLAB, ANSYS, SolidWorks, Python, AutoCAD, MS Excel

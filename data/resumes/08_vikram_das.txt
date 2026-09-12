@@ -1,0 +1,19 @@
+Vikram Das
+vikram.das@email.com | github.com/vikramd
+
+EDUCATION
+B.Tech Computer Science, IIT Guwahati, 2023 - 2027, CGPA 8.4
+
+EXPERIENCE
+Software Engineering Intern, CloudNine, May 2025 - Jul 2025
+- Built a TypeScript + React admin console with server-side rendering in Next.js
+- Designed Node.js REST APIs backed by PostgreSQL with Prisma ORM
+- Added Jest and Cypress tests; integrated into the CI/CD pipeline
+- Containerised the stack with Docker Compose for local development
+
+PROJECTS
+- Winner, HackNova 2025: built a campus events platform (React, Express, MongoDB) in 36 hours
+- Open-source contributor to a popular React component library
+
+SKILLS
+TypeScript, JavaScript, React, Next.js, Node.js, Express, PostgreSQL, MongoDB, Docker, Jest, Cypress, Git

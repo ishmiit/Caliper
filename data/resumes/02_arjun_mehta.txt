@@ -1,0 +1,18 @@
+Arjun Mehta
+arjun.mehta@email.com | 9876501234
+
+Education
+B.E. Information Technology, RV College of Engineering, 2022 - 2026
+
+Experiance
+Web Developer Intern, StartupHub, Jan '25 - Present
+- built REST APIs with Express and MongoDB for a booking platform used by 2,000 users
+- created responsive pages with HTML, CSS and vanilla JavaScript
+- fixed bugs reported by customers and worked with the design team
+
+Projects
+- Hostel Mess Feedback App: Express backend, EJS frontend, MongoDB
+- Portfolio website with animations
+
+Technologies
+HTML, CSS, JavaScript, Express, MongoDB, Git, Bootstrap

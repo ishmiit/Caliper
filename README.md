@@ -1,0 +1,61 @@
+# Caliper — the shortlisting engine that shows its work
+
+Ranks a resume pool against a JD with a full evidence trail, and flags the phrases in the JD that are hiding qualified candidates — with a measured count.
+
+**No LLM anywhere in the loop.** Scores, rankings and explanations are all computed by the engine and rendered from the evidence graph.
+
+## Run
+
+```
+pip install -r requirements.txt        # once
+cd web && npm install && cd ..         # once
+start.bat                              # backend :8000 + frontend :5173
+```
+
+First backend start takes ~20s (loads MiniLM). After that a full run over 18 resumes is ~3s.
+
+## On the day
+
+1. Drop the 18 PDFs into `data/resumes/` (PDFs take precedence over the synthetic `.txt` samples) and `Sample_JD.pdf` into `data/`.
+2. Press **Run**. Or use **Upload** to drag files in from the UI.
+3. Go to **Evaluate**, label each candidate strong/medium/weak, press **Save & measure** → nDCG@5 / Spearman ρ and the ablation table appear from real measurements.
+
+## How the matching works (the judge walkthrough)
+
+```
+PDF ──pdfplumber → PyMuPDF fallback──▶ fuzzy section headers ──▶ atomic evidence chunks (one bullet each)
+                                                                  section weight: EXPERIENCE 1.0 · PROJECTS 0.85 · SKILLS 0.6 · EDUCATION 0.5
+
+JD ──rule-based──▶ requirement graph: R01…Rn {type, must/nice, weight 3/1, canonical terms}
+
+for every (requirement, candidate):
+  KEYWORD  = max( exact 1.0, alias 0.95, ontology hop-decay 0.75^hops, 0.6 · BM25_norm )   ← hand-written BM25, k1=1.5 b=0.75
+  SEMANTIC = max over chunks of cos(MiniLM(req), MiniLM(chunk)) · section weight            ← late interaction, argmax kept as evidence
+             → cohort percentile calibration (this is what produces score spread)
+  FUSE     = CONFIRMED  if both ≥ τ           → max(L,S)
+             STATED     if keyword only        → 0.9·L
+             INFERRED   if semantic only, must-have hard skill → 0.65·S   ← "named tools shouldn't be satisfied by loosely related experience"
+             MISSING    otherwise
+
+score = 100 · Σ w_r · fit_r / Σ w_r · (1 − soft coverage penalty ≤ 15%)     ← never a hard filter
+```
+
+The brief's own example: JD says **Node.js**, resume says *"built REST APIs with Express and MongoDB"*. Ontology: `express is_a node.js` → 1 hop → 0.75 keyword credit, and the semantic channel agrees → **CONFIRMED**, note: *"'express' implies node.js (1 hop)"*. You can see this on Arjun Mehta's receipt, requirement R09.
+
+## Layout
+
+```
+engine/   ingest · jd_graph · ontology · lexical (BM25) · semantic · fusion · explain · audit · evaluate · pipeline
+api/      FastAPI — /api/run /api/rank /api/upload /api/resume /api/compare /api/audit /api/chat /api/labels /api/blind
+web/      React + Tailwind + framer-motion + recharts
+data/     skill_ontology.json · bias_lexicon.json · resumes/ · Sample_JD · labels.json
+```
+
+## Demo beats
+
+1. **Run** → engine log ticks (real timings) → board lands with spread.
+2. Click the **Hidden Gem** row → receipt: every requirement, verdict, both channel scores, quoted resume line. Click a quote → resume scrolls to the line.
+3. Flip **Semantic** off → board re-ranks, the gem falls. Flip back.
+4. **Ask the graph**: "Why is #1 above #2?" → head-to-head waterfall with citations.
+5. **JD Audit** → "3+ years" on an intern role: hard-filter would reject N of 18 → **Accept** → board re-ranks live.
+6. **Evaluate** → ablation table, sliders, radar.

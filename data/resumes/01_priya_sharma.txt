@@ -1,0 +1,19 @@
+Priya Sharma
+priya.sharma@email.com | +91 98765 43210 | github.com/priyasharma
+
+EDUCATION
+B.Tech Computer Science, Manipal Institute of Technology, 2023 - 2027, CGPA 8.9
+
+EXPERIENCE
+Software Development Intern, Zeta Labs, May 2025 - Jul 2025
+- Built REST APIs with Node.js and Express serving 40k requests/day for the payments dashboard
+- Developed React components with TypeScript and Redux for the merchant portal
+- Wrote Jest unit tests raising coverage from 40% to 82%
+- Containerised services with Docker and deployed to AWS ECS via GitHub Actions CI/CD
+
+PROJECTS
+- CampusCart: MERN stack marketplace with JWT authentication, MongoDB aggregation pipelines; deployed on Vercel and Render
+- DevTracker: Next.js + PostgreSQL app for tracking open-source contributions
+
+SKILLS
+JavaScript, TypeScript, React, Node.js, Express, MongoDB, PostgreSQL, Docker, AWS, Git, Jest, Tailwind CSS

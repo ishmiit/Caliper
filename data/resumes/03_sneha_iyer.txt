@@ -1,0 +1,18 @@
+Sneha Iyer
+sneha.iyer@email.com
+
+EDUCATION
+B.Tech CSE, VIT Vellore, 2023-2027, CGPA 9.1
+
+WORK EXPERIENCE
+Frontend Intern, PixelWorks, 06/2025 - 08/2025
+- Designed and shipped React dashboards with Tailwind CSS used by 15 enterprise clients
+- Integrated GraphQL APIs and optimised rendering, cutting load time by 35%
+- Collaborated in two-week sprints with product and QA teams
+
+PROJECTS
+- Habit tracker built with React, Firebase auth and Firestore
+- Chrome extension for tab management (JavaScript)
+
+SKILLS
+React, JavaScript, TypeScript, Tailwind, Figma, Git, Firebase

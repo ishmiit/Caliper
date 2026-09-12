@@ -1,0 +1,17 @@
+MANISH YADAV
+manish.yadav@email.com  |  9811122233  |  Delhi
+
+EDUCATION
+Diploma in Computer Applications, 2023 - 2025
+
+EXPERIANCE
+IT Support Intern, Local Systems Pvt Ltd, 01/2025-now
+- Installed and configured Windows systems and printers for 50+ staff
+- Handled helpdesk tickets and basic network troubleshooting
+
+PROJECTS
+- Built a simple inventory tracker in Excel with macros
+- Made a static HTML page for a family business
+
+SKILLS
+Windows, Networking basics, MS Excel, HTML, Customer Support

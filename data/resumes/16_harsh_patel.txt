@@ -1,0 +1,18 @@
+Harsh Patel
+harsh.patel@email.com | 9876543210
+
+Education
+B.Tech Computer Science, Nirma University, 2022 - 2026
+
+Experience
+Machine Learning Intern, VisionAI Labs, Jun 2025 - Aug 2025
+- Trained image classification models with PyTorch achieving 94% accuracy
+- Built a small Flask API to serve model predictions
+- Used Git and Docker for experiment reproducibility
+
+Projects
+- Face mask detection with OpenCV and TensorFlow
+- Kaggle competitions (top 10%)
+
+Skills
+Python, PyTorch, TensorFlow, OpenCV, Flask, Docker, Git, NumPy, pandas

@@ -1,0 +1,19 @@
+Pooja Desai
+pooja.desai@email.com
+
+EDUCATION
+B.Tech Computer Science, MIT Manipal, 2023 - 2027
+
+EXPERIENCE
+Frontend Developer Intern, ShopEase, Feb 2025 - Apr 2025
+- Built product listing and checkout pages in React with Redux Toolkit
+- Implemented responsive layouts with CSS modules and Tailwind
+- Consumed REST APIs and handled loading and error states
+- Collaborated with backend engineers on API contracts
+
+PROJECTS
+- Weather app using React and the OpenWeather API
+- Recipe finder built with Vue.js and Firebase
+
+SKILLS
+JavaScript, React, Redux, Vue, HTML, CSS, Tailwind, Git, REST APIs

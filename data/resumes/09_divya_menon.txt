@@ -1,0 +1,17 @@
+Divya Menon
+divya.menon@email.com
+
+Education
+B.Tech Electronics and Communication, Amrita University, 2022 - 2026
+
+Experience
+Embedded Systems Intern, RoboWorks, Jun 2025 - Jul 2025
+- Programmed STM32 microcontrollers in C for a line-following robot
+- Debugged UART and I2C communication issues with a logic analyser
+
+Projects
+- IoT weather station with ESP32 and a small Flask dashboard
+- Arduino-based home automation
+
+Skills
+C, C++, Embedded C, Arduino, ESP32, Python (basic), Flask (basic)

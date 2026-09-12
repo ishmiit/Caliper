@@ -1,0 +1,28 @@
+Junior Full Stack Developer Intern
+TechNova Solutions · Bengaluru · 6-month internship
+
+About the role:
+TechNova Solutions is looking for a young, energetic Junior Full Stack Developer Intern to join our product team. You will work closely with senior engineers to build features across our web platform.
+
+Responsibilities:
+- Build and maintain responsive web interfaces using React
+- Develop backend services and REST APIs with Node.js
+- Work with MongoDB or PostgreSQL databases to store and query application data
+- Collaborate with designers and product managers in an agile team
+- Write clean, well-documented code and participate in code reviews
+- Debug and fix issues across the stack
+
+Requirements:
+- Strong knowledge of JavaScript, HTML and CSS
+- Hands-on experience with React or a similar frontend framework
+- Experience building backend services with Node.js
+- Familiarity with Git and GitHub workflows
+- 3+ years of professional experience in software development
+- Currently pursuing a B.Tech in Computer Science from a tier-1 institution
+- Good communication and problem-solving skills
+
+Nice to have:
+- Exposure to Docker or cloud platforms such as AWS
+- Experience with TypeScript
+- Knowledge of testing frameworks such as Jest
+- Prior internship or hackathon experience

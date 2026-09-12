@@ -1,0 +1,18 @@
+Meera Nair
+meera.nair@email.com | 9123456789
+
+EDUCATION
+B.Sc Computer Science, St. Joseph's College, 2022 - 2025
+
+EXPERIENCE
+Data Analyst Intern, Insight Analytics, 2024 - 2025
+- Cleaned and analysed sales datasets using pandas and SQL
+- Built Tableau dashboards for the sales leadership team
+- Presented insights in weekly stakeholder meetings
+
+PROJECTS
+- Customer churn prediction with scikit-learn
+- Basic personal website with HTML and CSS
+
+SKILLS
+Python, pandas, SQL, Tableau, Excel, HTML, CSS, scikit-learn

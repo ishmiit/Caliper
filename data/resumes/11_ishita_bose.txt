@@ -1,0 +1,19 @@
+Ishita Bose
+ishita.bose@email.com | linkedin.com/in/ishitabose
+
+EDUCATION
+B.Tech Computer Science, Jadavpur University, 2023 - 2027, CGPA 8.7
+
+EXPERIENCE
+Full Stack Intern, Nimbus Health, Jan 2025 - Mar 2025
+- Shipped patient-intake forms in React with form validation and accessibility fixes
+- Wrote Node.js services using Express and Mongoose for appointment scheduling
+- Added JWT-based authentication and rate limiting
+- Participated in daily stand-ups and sprint retrospectives with a 6-person team
+
+PROJECTS
+- LibraryOS: MERN stack library management with role-based dashboards, deployed on Render
+- Quiz app with React and Supabase
+
+SKILLS
+JavaScript, React, Node.js, Express, MongoDB, Supabase, Git, GitHub, HTML, CSS, Tailwind

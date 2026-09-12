@@ -1,0 +1,19 @@
+Ananya Rao
+ananya.rao@email.com | +91 90000 11111
+
+EDUCATION
+B.Tech Computer Science, PES University, 2023 - 2027
+
+EXPERIENCE
+Backend Developer Intern, FinEdge, March 2025 to May 2025
+- Developed microservices in Python using FastAPI and PostgreSQL
+- Implemented OAuth2 authentication and role-based access control
+- Wrote pytest suites and set up GitHub Actions pipelines
+- Deployed services on GCP Cloud Run with Docker
+
+PROJECTS
+- Expense splitter web app: Flask backend, React frontend, SQLite
+- CLI tool in Go for log analysis
+
+SKILLS
+Python, FastAPI, Flask, PostgreSQL, Docker, GCP, Git, React (basic), SQL

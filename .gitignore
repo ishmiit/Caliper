@@ -1,0 +1,24 @@
+# Node
+web/node_modules/
+web/dist/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Large/local-only assets
+*.zip
+
+# Runtime data written by the app
+data/labels.json

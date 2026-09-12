@@ -1,0 +1,18 @@
+Rohan Gupta
+rohan.gupta@email.com | 9988776655
+
+Education
+B.Tech CSE, SRM University, 2023 - 2027
+
+Experience
+Web Development Intern, Digital Bloom Agency, 2025
+- Created marketing websites for clients using WordPress and Elementor
+- Customised themes with HTML, CSS and jQuery
+- Handled SEO setup and Google Analytics tracking
+
+Projects
+- Portfolio site built with HTML/CSS/JavaScript
+- Simple to-do app in React (tutorial based)
+
+Skills
+HTML, CSS, JavaScript, jQuery, WordPress, Photoshop, React (beginner)

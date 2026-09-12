@@ -1,0 +1,19 @@
+Tanvi Joshi
+tanvi.joshi@email.com | github.com/tanvij
+
+EDUCATION
+B.Tech Computer Science, DA-IICT, 2023 - 2027, CGPA 9.3
+
+EXPERIENCE
+SDE Intern, Razorpay, May 2025 - Jul 2025
+- Developed a merchant onboarding flow in React and TypeScript with a Node.js BFF layer
+- Wrote GraphQL resolvers and optimised PostgreSQL queries, cutting p95 latency by 40%
+- Added Jest and Playwright tests; contributed to the team's GitHub Actions workflows
+- Deployed preview environments using Docker and AWS
+
+PROJECTS
+- Smart India Hackathon finalist: real-time disaster alert platform (React, Node.js, MongoDB, WebSockets)
+- Maintainer of a small open-source TypeScript utility library
+
+SKILLS
+TypeScript, JavaScript, React, Node.js, GraphQL, PostgreSQL, MongoDB, Docker, AWS, Jest, Playwright, Git

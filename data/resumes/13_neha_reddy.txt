@@ -1,0 +1,18 @@
+Neha Reddy
+neha.reddy@email.com | 9000012345
+
+EDUCATION
+B.Tech Information Technology, VNR VJIET, 2023 - 2027
+
+EXPERIENCE
+Software Intern, Quikr Systems, Jun 2025 - Aug 2025
+- Built internal tools in Java with Spring Boot and MySQL
+- Wrote JUnit tests and documented APIs using Swagger
+- Used Git and Jira in an agile team
+
+PROJECTS
+- Online voting system with Spring Boot and Thymeleaf
+- Personal finance dashboard in React consuming a Spring REST API
+
+SKILLS
+Java, Spring Boot, MySQL, JUnit, Git, Jira, React (basic), HTML, CSS

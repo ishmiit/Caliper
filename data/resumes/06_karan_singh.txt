@@ -1,0 +1,19 @@
+Karan Singh
+karan.singh@email.com
+
+Education
+BCA, Christ University, 2023 - 2026
+
+Internships
+Full Stack Developer Intern, BuildIt Technologies, Jan 2025 - Apr 2025
+- Worked on a MERN stack CRM: React frontend, Node.js/Express backend, MongoDB
+- Built REST endpoints for lead management and integrated Razorpay payments
+- Deployed the app on Heroku and later migrated to AWS EC2
+- Used Git for version control and reviewed pull requests from juniors
+
+Projects
+- Real-time chat app using Socket.io, Node.js and React
+- Blog platform with Next.js and MongoDB
+
+Skills
+JavaScript, React, Node.js, Express, MongoDB, HTML, CSS, Git, AWS, Socket.io

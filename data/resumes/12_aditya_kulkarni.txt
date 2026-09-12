@@ -1,0 +1,18 @@
+Aditya Kulkarni
+aditya.k@email.com
+
+Education
+B.Tech Computer Science, COEP Pune, 2022 - 2026
+
+Experience
+Android Developer Intern, AppForge, May 2025 - Jul 2025
+- Developed features for a food delivery app in Kotlin with Jetpack Compose
+- Integrated REST APIs using Retrofit and handled offline caching with Room
+- Fixed crashes reported via Firebase Crashlytics
+
+Projects
+- Flutter expense tracker with Firebase backend
+- Kotlin-based notes app published on Play Store (1k downloads)
+
+Skills
+Kotlin, Java, Android, Jetpack Compose, Flutter, Dart, Firebase, Git, REST APIs
