@@ -8,21 +8,28 @@
 <body>
 <x-dc>
 <helmet>
+<script>(function(){try{var t=localStorage.getItem('caliper-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+:root{--desk:#E8E9E4;--desk-vig:#DFE0DA;--paper:#FDFDFB;--paper-2:#F3F3EF;--ink:#141410;--muted:#5F5F58;--muted2:#4A4A44;--sub:#3A3A34;--lime:#D8FF3E;--azurite:#2141C8;--red:#D7321F;--shadow-rgb:25,25,20;--muted-rgb:95,95,88;--ink-rgb:20,20,16;--hl-blend:multiply;--hl-alpha:1;--paper-edge:transparent;--sheen:rgba(255,255,255,.35);}
+html[data-theme="dark"]{--desk:#111110;--desk-vig:#060606;--paper:#262623;--paper-2:#2E2E2B;--ink:#F4F3EE;--muted:#B3B3AA;--muted2:#C6C6BE;--sub:#D2D2CA;--lime:#D8FF3E;--azurite:#9DB0FF;--red:#FF7A6E;--shadow-rgb:0,0,0;--muted-rgb:179,179,170;--ink-rgb:244,243,238;--hl-blend:normal;--hl-alpha:.34;--paper-edge:rgba(255,255,255,.09);--sheen:rgba(255,255,255,.06);}
+html,body{background:var(--desk)!important;}
+</style>
+
 <link rel="stylesheet" href="./vendor/fonts.css">
 <style>
-html,body{margin:0;padding:0;background:#E8E9E4;}
+html,body{margin:0;padding:0;background:var(--desk);}
 *{box-sizing:border-box;}
-a{color:#2B4FD8;text-decoration:none;}
-a:hover{color:#191914;}
+a{color:var(--azurite);text-decoration:none;}
+a:hover{color:var(--ink);}
 @keyframes cal-swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes cal-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes cal-lift{0%{transform:translateZ(0)}42%{transform:translateZ(16px)}100%{transform:translateZ(0)}}
 @keyframes cal-gem{0%,100%{opacity:1}28%{opacity:.2}62%{opacity:1}}
 </style>
 </helmet>
-<div ref="{{ rootRef }}" onMouseMove="{{ onRootMove }}" style="position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;background:#E8E9E4;font-family:Switzer,system-ui,sans-serif;color:#191914;font-variant-numeric:tabular-nums;">
+<div ref="{{ rootRef }}" onMouseMove="{{ onRootMove }}" style="position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;background:radial-gradient(1400px 900px at 50% 30%, var(--desk), var(--desk-vig));font-family:Satoshi,system-ui,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;">
 
-  <a href="./start.html" style="position:absolute;left:26px;top:24px;z-index:60;font-size:11px;font-weight:500;letter-spacing:0.34em;color:#191914;text-decoration:none;">CALIPER</a>
+  <a href="./start.html" style="position:absolute;left:26px;top:24px;z-index:60;font-size:22px;font-weight:600;letter-spacing:0.30em;color:var(--ink);text-decoration:none;font-family:'Clash Display',sans-serif;">CALIPER</a>
 
   <div style="{{ teleWrap }}">
     <span ref="{{ teleRef }}"></span>
@@ -35,8 +42,8 @@ a:hover{color:#191914;}
 
       <div style="{{ jdStyle }}">
         <div style="{{ jdPaper }}" onClick="{{ openJd }}">
-          <div style="position:absolute;left:18px;top:16px;font-size:9px;letter-spacing:0.12em;font-weight:500;color:#8A8A80;">JOB DESCRIPTION</div>
-          <div style="position:absolute;left:18px;top:38px;right:18px;font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:17px;line-height:1.05;letter-spacing:-0.04em;">{{ jdShort1 }}<br>{{ jdShort2 }}</div>
+          <div style="position:absolute;left:18px;top:16px;font-size:13px;letter-spacing:0.12em;font-weight:500;color:var(--muted);">JOB DESCRIPTION</div>
+          <div style="position:absolute;left:18px;top:38px;right:18px;font-family:'Clash Display',sans-serif;font-weight:700;font-size:24px;line-height:1.02;letter-spacing:-0.04em;">{{ jdShort1 }}<br>{{ jdShort2 }}</div>
           <sc-for list="{{ jdRules }}" as="r" hint-placeholder-count="9">
             <div style="{{ r }}"></div>
           </sc-for>
@@ -49,8 +56,8 @@ a:hover{color:#191914;}
             <div style="{{ s.paper }}" onClick="{{ s.onOpen }}" onMouseMove="{{ s.onMove }}">
               <div style="{{ s.rankStyle }}">{{ s.rankLabel }}</div>
               <div style="{{ s.scoreStyle }}">{{ s.scoreLabel }}</div>
-              <div style="position:absolute;left:14px;top:44px;right:14px;pointer-events:none;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:12px;letter-spacing:-0.03em;line-height:1;">{{ s.name }}</div>
-              <div style="position:absolute;left:14px;top:60px;right:14px;pointer-events:none;font-size:7px;letter-spacing:0.02em;color:#8A8A80;">{{ s.role }}</div>
+              <div style="position:absolute;left:14px;top:42px;right:14px;pointer-events:none;font-family:'Clash Display',sans-serif;font-weight:600;font-size:19px;letter-spacing:-0.03em;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.name }}</div>
+              <div style="position:absolute;left:14px;top:64px;right:14px;pointer-events:none;font-size:10px;letter-spacing:0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted);">{{ s.role }}</div>
               <sc-for list="{{ s.rules }}" as="r" hint-placeholder-count="10">
                 <div style="{{ r }}"></div>
               </sc-for>
@@ -71,15 +78,15 @@ a:hover{color:#191914;}
   <div style="{{ controlsStyle }}">
     <button onClick="{{ toggleKw }}" style="{{ kwBtn }}">
       <span style="{{ kwTrack }}"><span style="{{ kwKnob }}"></span></span>
-      <span style="font-size:11px;font-weight:500;letter-spacing:0.02em;">keyword</span>
+      <span style="font-size:13px;font-weight:500;letter-spacing:0.02em;">keyword</span>
     </button>
     <button onClick="{{ toggleSem }}" style="{{ semBtn }}">
       <span style="{{ semTrack }}"><span style="{{ semKnob }}"></span></span>
-      <span style="font-size:11px;font-weight:500;letter-spacing:0.02em;">semantic</span>
+      <span style="font-size:13px;font-weight:500;letter-spacing:0.02em;">semantic</span>
     </button>
-    <div style="display:flex;align-items:baseline;gap:7px;padding-left:20px;border-left:1px solid rgba(138,138,128,0.35);">
-      <span style="font-size:9px;letter-spacing:0.12em;color:#8A8A80;">{{ metricName }}</span>
-      <span style="font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.02em;">{{ ndcgLabel }}</span>
+    <div style="display:flex;align-items:baseline;gap:7px;padding-left:20px;border-left:1px solid rgba(var(--muted-rgb),0.35);">
+      <span style="font-size:13px;letter-spacing:0.12em;color:var(--muted);">{{ metricName }}</span>
+      <span style="font-family:'Clash Display',sans-serif;font-weight:600;font-size:19px;letter-spacing:-0.02em;">{{ ndcgLabel }}</span>
     </div>
   </div>
 
@@ -93,7 +100,7 @@ a:hover{color:#191914;}
             <div style="{{ q.wash }}"></div>
             <div style="{{ q.text }}">{{ q.label }}</div>
             <svg viewBox="{{ q.vb }}" preserveAspectRatio="none" style="{{ q.ringStyle }}">
-              <path d="{{ q.ring }}" fill="none" stroke="#E23B2E" stroke-width="1.1" stroke-linecap="round"></path>
+              <path d="{{ q.ring }}" fill="none" stroke="var(--red)" stroke-width="1.1" stroke-linecap="round"></path>
             </svg>
           </div>
         </sc-for>
@@ -117,8 +124,8 @@ a:hover{color:#191914;}
       <div style="{{ p.wrap }}" ref="{{ p.ref }}" onClick="{{ p.onTap }}">
         <div style="{{ p.inner }}" ref="{{ p.innerRef }}">
           <div style="{{ p.paperBg }}"></div>
-          <div style="position:absolute;left:25px;top:66px;right:25px;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:21px;letter-spacing:-0.03em;line-height:1;">{{ p.name }}</div>
-          <div style="position:absolute;left:25px;top:97px;right:25px;font-size:11px;color:#8A8A80;">{{ p.role }}</div>
+          <div style="position:absolute;left:25px;top:66px;right:25px;font-family:'Clash Display',sans-serif;font-weight:600;font-size:30px;letter-spacing:-0.03em;line-height:1;">{{ p.name }}</div>
+          <div style="position:absolute;left:25px;top:97px;right:25px;font-size:13px;color:var(--muted);">{{ p.role }}</div>
           <sc-for list="{{ p.lines }}" as="l" hint-placeholder-count="10">
             <div style="{{ l.style }}">{{ l.t }}</div>
           </sc-for>
@@ -141,16 +148,16 @@ a:hover{color:#191914;}
     <div onClick="{{ closeJd }}" style="{{ jdocLayer }}">
       <div style="{{ jdocGroup }}">
       <div style="{{ jdocStyle }}" onClick="{{ stop }}">
-        <div style="position:absolute;left:40px;top:32px;font-size:9px;letter-spacing:0.12em;font-weight:500;color:#8A8A80;">JOB DESCRIPTION · DRAFT</div>
-        <div style="position:absolute;left:40px;top:54px;right:44px;font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:26px;letter-spacing:-0.04em;line-height:1;">{{ jdTitle }}</div>
-        <div style="position:absolute;left:40px;top:104px;right:44px;font-size:12px;line-height:1.45;color:#191914;">{{ jdAbout }}</div>
-        <div style="position:absolute;left:40px;top:204px;font-size:9px;letter-spacing:0.12em;font-weight:500;color:#8A8A80;">MUST-HAVE REQUIREMENTS</div>
-        <div style="position:absolute;left:40px;top:226px;right:44px;display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.3;">
+        <div style="position:absolute;left:40px;top:32px;font-size:13px;letter-spacing:0.12em;font-weight:500;color:var(--muted);">JOB DESCRIPTION · DRAFT</div>
+        <div style="position:absolute;left:40px;top:54px;right:44px;font-family:'Clash Display',sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.04em;line-height:1;">{{ jdTitle }}</div>
+        <div style="position:absolute;left:40px;top:104px;right:44px;font-size:14px;line-height:1.45;color:var(--ink);">{{ jdAbout }}</div>
+        <div style="position:absolute;left:40px;top:204px;font-size:13px;letter-spacing:0.12em;font-weight:500;color:var(--muted);">MUST-HAVE REQUIREMENTS</div>
+        <div style="position:absolute;left:40px;top:226px;right:44px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.3;">
           <sc-for list="{{ jdReqList }}" as="q" hint-placeholder-count="7">
             <div>{{ q }}</div>
           </sc-for>
         </div>
-        <div style="position:absolute;left:40px;top:428px;right:44px;display:flex;flex-direction:column;gap:12px;font-size:11.5px;line-height:1.4;">
+        <div style="position:absolute;left:40px;top:428px;right:44px;display:flex;flex-direction:column;gap:12px;font-size:13.5px;line-height:1.4;">
           <sc-for list="{{ jdFlagLines }}" as="fl" hint-placeholder-count="2">
             <div style="position:relative;">
               <sc-for list="{{ fl.spans }}" as="sp" hint-placeholder-count="3">
@@ -163,8 +170,8 @@ a:hover{color:#191914;}
       <div style="{{ cmtWrap }}" onClick="{{ stop }}">
         <sc-for list="{{ jdCards }}" as="cd" hint-placeholder-count="2">
           <div style="{{ cd.style }}">
-            <div style="font-size:11px;font-weight:500;">{{ cd.title }}</div>
-            <div style="font-size:10.5px;line-height:1.4;color:#8A8A80;margin-top:4px;">{{ cd.body }}</div>
+            <div style="font-size:13px;font-weight:500;">{{ cd.title }}</div>
+            <div style="font-size:12.5px;line-height:1.4;color:var(--muted);margin-top:4px;">{{ cd.body }}</div>
             <sc-if value="{{ cd.canAccept }}" hint-placeholder-val="{{ true }}">
               <button onClick="{{ cd.accept }}" style="{{ cd.btn }}">{{ cd.label }}</button>
             </sc-if>
@@ -177,21 +184,34 @@ a:hover{color:#191914;}
 
   <sc-if value="{{ plain }}" hint-placeholder-val="{{ false }}">
     <div style="{{ plainStyle }}">
-      <div style="max-width:840px;margin:0 auto;">
-        <div style="font-size:9px;letter-spacing:0.12em;color:#8A8A80;margin-bottom:24px;">PLAIN MODE · PRESS P TO RETURN TO THE TABLE</div>
+      <div style="max-width:720px;margin:0 auto;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;">
+          <div style="font-size:13px;letter-spacing:0.14em;color:var(--muted);">RANKED POOL · CLICK A NAME TO OPEN THE RESUME</div>
+          <div style="font-size:13px;letter-spacing:0.14em;color:var(--muted);">{{ plainCount }}</div>
+        </div>
         <sc-for list="{{ plainRows }}" as="r" hint-placeholder-count="18">
-          <div style="display:grid;grid-template-columns:38px 1fr 210px 52px;gap:16px;align-items:baseline;padding:11px 0;border-bottom:1px solid rgba(138,138,128,0.25);">
-            <div style="font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.03em;">{{ r.rank }}</div>
-            <div style="font-size:13px;font-weight:500;">{{ r.name }}</div>
-            <div style="font-size:10.5px;color:#8A8A80;">{{ r.ev }}</div>
-            <div style="font-size:13px;text-align:right;">{{ r.score }}</div>
+          <div onClick="{{ r.open }}" style="{{ r.style }}">
+            <div style="font-size:14px;letter-spacing:0.02em;color:var(--muted);width:44px;">{{ r.rank }}</div>
+            <div style="font-family:'Clash Display',sans-serif;font-weight:600;font-size:26px;letter-spacing:-0.03em;line-height:1.1;">{{ r.name }}</div>
+            <div style="margin-left:auto;font-size:14px;color:var(--muted);">{{ r.ev }}</div>
           </div>
         </sc-for>
       </div>
     </div>
   </sc-if>
 
-  <button onClick="{{ togglePlain }}" title="plain mode" style="position:absolute;right:22px;bottom:24px;z-index:130;width:9px;height:9px;border-radius:50%;border:none;padding:0;background:rgba(25,25,20,0.22);cursor:pointer;"></button>
+  <sc-if value="{{ reading }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;right:26px;top:22px;z-index:96;text-align:right;pointer-events:none;">
+      <div style="font-size:13px;letter-spacing:0.14em;color:var(--muted);">SCORE</div>
+      <div style="font-family:'Clash Display',sans-serif;font-weight:700;font-size:44px;letter-spacing:-0.04em;line-height:1;color:var(--ink);">{{ scoreBig }}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;">{{ scoreSub }}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px;">{{ scoreSub2 }}</div>
+    </div>
+  </sc-if>
+
+  <button onClick="{{ togglePlain }}" title="list / table" style="position:absolute;right:150px;bottom:17px;z-index:130;border:1px solid rgba(var(--ink-rgb),.35);background:none;padding:5px 10px;cursor:pointer;font:inherit;font-size:13px;letter-spacing:0.16em;color:var(--ink);text-transform:uppercase;">{{ plainLabel }}</button>
+  <button onClick="{{ toggleTheme }}" title="theme" style="position:absolute;right:26px;bottom:19px;z-index:130;border:none;background:none;padding:4px 6px;cursor:pointer;font:inherit;font-size:13px;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;">{{ themeLabel }}</button>
+
 
 </div>
 </x-dc>
@@ -236,7 +256,7 @@ class Component extends DCLogic {
   hlBg(seed) {
     const r = this.rng(seed);
     const d = this.hlPath(1, 6, 98, 9.5, r);
-    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'><path d='" + d + "' fill='#D8FF3E'/></svg>";
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'><path d='" + d + "' fill='#D8FF3E' fill-opacity='" + this.hlAlpha() + "'/></svg>";
     return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
   }
 
@@ -313,7 +333,7 @@ class Component extends DCLogic {
         li, x, t: e[1] === 'i'
           ? 'inferred · ' + (e[5] || 1) + ' hop · ' + (e[3] || 0).toFixed(2)
           : (e[5] || 'confirmed') + ' · line ' + (li + 1),
-        color: e[1] === 'i' ? '#2B4FD8' : '#191914'
+        color: e[1] === 'i' ? 'var(--azurite)' : 'var(--ink)'
       });
     });
     return { marks, labels };
@@ -352,7 +372,7 @@ class Component extends DCLogic {
   onKey(e) {
     const k = e.key;
     if (k === 'p' || k === 'P') { this.setState({ plain: !this.state.plain, open: null, jdOpen: false }); return; }
-    if (k === 'Escape') { this.setState({ open: null, jdOpen: false, hoverThread: null }); return; }
+    if (k === 'Escape') { this.setState({ open: null, jdOpen: false, hoverThread: null, plain: !!this.state.fromList, fromList: false }); return; }
     if (this.state.phase !== 'sorted' || this.state.plain) return;
     const order = this.rankOrder();
     if (k === 'ArrowRight' || k === 'ArrowLeft' || k === 'ArrowDown' || k === 'ArrowUp') {
@@ -511,7 +531,9 @@ class Component extends DCLogic {
       const d = c.depth || {};
       const roles = (d.internship || 0) + (d.professional || 0);
       const sub = (c.months_experience ? c.months_experience + ' mo dated' : 'no dated experience') + ' \u00b7 ' + roles + ' in roles \u00b7 ' + (d.listed || 0) + ' listed';
-      return [c.name, sub, c.score_keyword_only / 100, c.score_semantic_only / 100, 0, texts.map((t) => this.shorten(t, 60)), evidence, c.final_score / 100, c.candidate_id, !!c.hidden_gem, c.integrity || []];
+      const allv = c.per_requirement.map((p) => p.verdict);
+      const summary = allv.filter((v) => v === 'CONFIRMED').length + ' confirmed · ' + allv.filter((v) => v === 'INFERRED').length + ' inferred · ' + allv.filter((v) => v === 'STATED').length + ' stated · ' + allv.filter((v) => v === 'MISSING' || v === 'WEAK').length + ' missing of ' + allv.length;
+      return [c.name, sub, c.score_keyword_only / 100, c.score_semantic_only / 100, 0, texts.map((t) => this.shorten(t, 52)), evidence, c.final_score / 100, c.candidate_id, !!c.hidden_gem, c.integrity || [], summary];
     });
     this.KW = KW; this.byId = byId;
     this.GEM = this.DATA.findIndex((x) => x[9]);
@@ -566,12 +588,16 @@ class Component extends DCLogic {
         btn: {
           marginTop: 10, padding: '5px 11px', border: '1px solid ' + (acc ? 'rgba(138,138,128,.5)' : '#191914'),
           background: acc ? 'none' : '#191914', color: acc ? '#8A8A80' : '#FDFDFB', font: 'inherit',
-          fontSize: 9.5, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: acc ? 'default' : 'pointer'
+          fontSize: 13, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: acc ? 'default' : 'pointer'
         },
         style: { position: 'absolute', left: 0, top: 380 + k * 96, width: 236, paddingLeft: 13, borderLeft: '2px solid ' + (impact(f) > 0 ? '#2B4FD8' : '#8A8A80') }
       };
     });
   }
+
+  dark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+  hlAlpha() { return this.dark() ? 0.30 : 1; }
+  setTheme(t) { document.documentElement.setAttribute('data-theme', t); try { localStorage.setItem('caliper-theme', t); } catch (e) {} this.forceUpdate(); }
 
   jdTitleText() {
     const t = (this.graph && this.graph.jd_title) || '';
@@ -609,7 +635,7 @@ class Component extends DCLogic {
     this._nraf = requestAnimationFrame(step);
   }
 
-  docLine(k) { return 144 + k * 28.8; }
+  docLine(k) { return 140 + k * 30; }
 
   makeDoc(i, hoverLi) {
     const c = this.DATA[i], sd = this.sheetData[i], acc = this.state.accepted;
@@ -617,19 +643,19 @@ class Component extends DCLogic {
     const lines = c[5].map((t, k) => ({
       t,
       style: {
-        position: 'absolute', left: 25, top: this.docLine(k) - 6, fontSize: 10, lineHeight: '12px',
-        color: '#191914', whiteSpace: 'nowrap', letterSpacing: '-0.002em',
+        position: 'absolute', left: 25, top: this.docLine(k) - 6, fontSize: 12, lineHeight: '14px',
+        color: 'var(--ink)', whiteSpace: 'nowrap', letterSpacing: '-0.002em',
         backgroundImage: k === hoverLi ? this.hlBg(880 + k) : 'none',
         backgroundSize: '100% 130%', backgroundPosition: '0 50%', backgroundRepeat: 'no-repeat'
       }
     }));
     const marks = sd.marks.filter((m) => !(m.kind === 'r' && acc)).map((m) => m.kind === 'h'
-      ? { d: m.d, fill: '#D8FF3E', stroke: 'none', sw: 0, style: { mixBlendMode: 'multiply' } }
-      : { d: m.d, fill: 'none', stroke: m.kind === 'b' ? '#2B4FD8' : '#E23B2E', sw: m.kind === 'b' ? 1.3 : 1.5, style: {} });
+      ? { d: m.d, fill: this.dark() ? 'rgba(216,255,62,.30)' : '#D8FF3E', stroke: 'none', sw: 0, style: { mixBlendMode: 'var(--hl-blend)' } }
+      : { d: m.d, fill: 'none', stroke: m.kind === 'b' ? 'var(--azurite)' : 'var(--red)', sw: m.kind === 'b' ? 1.3 : 1.5, style: {} });
     const labels = sd.labels.map((b) => ({
       t: b.t,
       style: {
-        position: 'absolute', left: b.x * 1.8, top: this.docLine(b.li) + 8, fontSize: 9,
+        position: 'absolute', left: b.x * 1.8, top: this.docLine(b.li) + 8, fontSize: 12.5,
         letterSpacing: '0.01em', color: b.color, whiteSpace: 'nowrap'
       }
     }));
@@ -641,7 +667,7 @@ class Component extends DCLogic {
     const open = st.open, reading = open != null, jdOpen = st.jdOpen, plain = st.plain;
     const mob = w < 760;
     const lensOn = st.lensDoc != null && !reading && !jdOpen && !plain && !mob;
-    const paperBg = { position: 'absolute', inset: 0, background: '#FDFDFB' };
+    const paperBg = { position: 'absolute', inset: 0, background: 'var(--paper)' };
 
     let rs = Math.min(1.52, (h - 215) / 468, (w - 600) / 342);
     rs = Math.max(0.62, rs);
@@ -663,12 +689,12 @@ class Component extends DCLogic {
       wrap: {
         position: 'absolute', left: 0, top: 0, width: 190, height: 190, borderRadius: '50%', overflow: 'hidden',
         opacity: lensOn ? 1 : 0, transition: 'opacity 170ms ease', pointerEvents: 'none', zIndex: 95,
-        boxShadow: '0 10px 30px rgba(25,25,20,.18)'
+        boxShadow: '0 10px 30px rgba(var(--shadow-rgb),.18)'
       },
       inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468 },
       rim: {
-        position: 'absolute', inset: 0, borderRadius: '50%', border: '1px solid rgba(25,25,20,.5)',
-        boxShadow: 'inset 0 12px 24px -14px rgba(25,25,20,.7)', pointerEvents: 'none'
+        position: 'absolute', inset: 0, borderRadius: '50%', border: '1px solid rgba(var(--shadow-rgb),.5)',
+        boxShadow: 'inset 0 12px 24px -14px rgba(var(--shadow-rgb),.7)', pointerEvents: 'none'
       },
       rankStyle: { display: 'none' }, rankLabel: '', onTap: null,
       ...this.makeDoc(st.lensDoc == null ? 0 : st.lensDoc, -1)
@@ -677,8 +703,8 @@ class Component extends DCLogic {
       key: 'read', ref: null, innerRef: null, paperBg,
       wrap: {
         position: 'absolute', left: docX, top: docY, width: docW, height: docH, overflow: 'hidden', zIndex: 90,
-        background: '#FDFDFB', pointerEvents: 'auto',
-        boxShadow: '0 2px 4px rgba(25,25,20,.12), 0 44px 74px rgba(25,25,20,.18)'
+        background: 'var(--paper)', pointerEvents: 'auto',
+        boxShadow: '0 2px 4px rgba(var(--shadow-rgb),.12), 0 44px 74px rgba(var(--shadow-rgb),.18)'
       },
       inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468, transform: 'scale(' + rs + ')', transformOrigin: '0 0' },
       rim: { display: 'none' }, rankStyle: { display: 'none' }, rankLabel: '', onTap: null,
@@ -691,13 +717,13 @@ class Component extends DCLogic {
         label: q[1],
         wrap: { position: 'absolute', left: 22, top: 118 + k * 40, width: jdW - 44, height: 30 },
         wash: {
-          position: 'absolute', left: -4, top: 1, width: '104%', height: 18, mixBlendMode: 'multiply',
+          position: 'absolute', left: -4, top: 1, width: '104%', height: 18, mixBlendMode: 'var(--hl-blend)',
           backgroundImage: this.hlBg(300 + k), backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat',
           opacity: on ? 1 : 0, transition: 'opacity 160ms ease'
         },
         text: {
-          position: 'absolute', left: 0, top: 2, right: 0, fontSize: 11.5, lineHeight: '15px',
-          color: miss ? '#8A8A80' : '#191914'
+          position: 'absolute', left: 0, top: 2, right: 0, fontSize: 13.5, lineHeight: '15px',
+          color: miss ? 'var(--muted)' : 'var(--ink)'
         },
         ring: this.ringPath(256, 26, 700 + k), vb: '0 0 256 26',
         ringStyle: {
@@ -717,7 +743,7 @@ class Component extends DCLogic {
       threads.push({
         d: 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' C ' + (x1 + dx * 0.42).toFixed(1) + ' ' + (y1 + sag).toFixed(1) +
           ', ' + (x2 - dx * 0.42).toFixed(1) + ' ' + (y2 + sag).toFixed(1) + ', ' + x2.toFixed(1) + ' ' + y2.toFixed(1),
-        stroke: inf ? '#2B4FD8' : '#191914',
+        stroke: inf ? 'var(--azurite)' : 'var(--ink)',
         sw: hv === q[0] ? 2.6 : 1.1,
         style: {
           opacity: other ? 0.2 : inf ? 0.85 : 0.95, pointerEvents: 'stroke', cursor: 'pointer',
@@ -731,7 +757,7 @@ class Component extends DCLogic {
 
     const notes = reading ? (this.DATA[open][6] || []).filter((e) => e[1] === 'i').map((e) => ({
       text: e[4],
-      style: { paddingLeft: 11, borderLeft: '2px solid #2B4FD8', fontSize: 10.5, lineHeight: '14px', color: '#6E6E66' }
+      style: { paddingLeft: 11, borderLeft: '2px solid var(--azurite)', fontSize: 12.5, lineHeight: '14px', color: 'var(--muted2)' }
     })) : [];
 
     const order = this.rankOrder();
@@ -740,8 +766,9 @@ class Component extends DCLogic {
       const c = this.DATA[i], ev = c[6] || [];
       return {
         rank: String(rk[i].rank).padStart(2, '0'), name: c[0], role: c[1], score: rk[i].s.toFixed(2),
-        ev: ev.filter((e) => e[1] === 'c').length + ' confirmed · ' + ev.filter((e) => e[1] === 'i').length +
-          ' inferred · ' + ev.filter((e) => e[1] === 'm').length + ' missing'
+        ev: c[11] || '',
+        open: () => this.setState({ open: i, focus: i, plain: false, fromList: true, hoverThread: null, lensDoc: null }),
+        style: { display: 'flex', alignItems: 'baseline', gap: 18, padding: '15px 4px', borderBottom: '1px solid rgba(var(--muted-rgb),0.25)', cursor: 'pointer' }
       };
     });
 
@@ -755,17 +782,17 @@ class Component extends DCLogic {
         panes.push({
           key: 'm' + i, ref: null, innerRef: null, paperBg,
           wrap: {
-            position: 'relative', width: cw, height: chh, marginBottom: 18, background: '#FDFDFB',
+            position: 'relative', width: cw, height: chh, marginBottom: 18, background: 'var(--paper)',
             overflow: 'hidden', pointerEvents: 'auto', cursor: 'pointer',
-            boxShadow: '0 1px 2px rgba(25,25,20,.11), 0 12px 26px rgba(25,25,20,.09)'
+            boxShadow: '0 1px 2px rgba(var(--shadow-rgb),.11), 0 12px 26px rgba(var(--shadow-rgb),.09)'
           },
           inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468, transform: 'scale(' + cs + ')', transformOrigin: '0 0' },
           rim: { display: 'none' },
           onTap: () => this.setState({ open: i, hoverThread: null }),
           rankStyle: {
-            position: 'absolute', left: 14, top: 10, fontFamily: "'Cabinet Grotesk',sans-serif", fontWeight: 900,
+            position: 'absolute', left: 14, top: 10, fontFamily: "'Clash Display',sans-serif", fontWeight: 700,
             fontSize: 26, letterSpacing: '-0.04em', lineHeight: 1, pointerEvents: 'none',
-            color: rk[i].rank > 12 ? '#8A8A80' : '#191914'
+            color: rk[i].rank > 12 ? 'var(--muted)' : 'var(--ink)'
           },
           rankLabel: String(rk[i].rank).padStart(2, '0'),
           ...this.makeDoc(i, -1)
@@ -775,9 +802,9 @@ class Component extends DCLogic {
         panes.push({
           key: 'mread', ref: null, innerRef: null, paperBg,
           wrap: {
-            position: 'absolute', left: 20, top: 250, width: 342 * cs2, height: rch, background: '#FDFDFB',
+            position: 'absolute', left: 20, top: 250, width: 342 * cs2, height: rch, background: 'var(--paper)',
             overflow: 'hidden', pointerEvents: 'auto',
-            boxShadow: '0 2px 4px rgba(25,25,20,.12), 0 32px 54px rgba(25,25,20,.16)'
+            boxShadow: '0 2px 4px rgba(var(--shadow-rgb),.12), 0 32px 54px rgba(var(--shadow-rgb),.16)'
           },
           inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468, transform: 'scale(' + cs2 + ')', transformOrigin: '0 0' },
           rim: { display: 'none' }, rankStyle: { display: 'none' }, rankLabel: '', onTap: null,
@@ -794,7 +821,7 @@ class Component extends DCLogic {
           threads.push({
             d: 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' C ' + x1.toFixed(1) + ' ' + (y1 + 64).toFixed(1) +
               ', ' + x2.toFixed(1) + ' ' + (y2 - 64).toFixed(1) + ', ' + x2.toFixed(1) + ' ' + y2.toFixed(1),
-            stroke: inf ? '#2B4FD8' : '#191914', sw: hv === q[0] ? 2.4 : 1,
+            stroke: inf ? 'var(--azurite)' : 'var(--ink)', sw: hv === q[0] ? 2.4 : 1,
             style: {
               opacity: other ? 0.2 : inf ? 0.85 : 0.95, pointerEvents: 'stroke', strokeDasharray: 1,
               transition: 'opacity 180ms ease, stroke-width 180ms ease',
@@ -808,7 +835,7 @@ class Component extends DCLogic {
       reqs.forEach((q, k) => {
         const col = k % 3, row = Math.floor(k / 3), colw = cw / 3;
         q.wrap = { position: 'absolute', left: col * colw, top: row * 44, width: colw - 10, height: 38 };
-        q.text = { position: 'absolute', left: 0, top: 0, right: 0, fontSize: 10, lineHeight: '12.5px', color: q.text.color };
+        q.text = { position: 'absolute', left: 0, top: 0, right: 0, fontSize: 12, lineHeight: '12.5px', color: q.text.color };
         q.wash = { ...q.wash, top: -2, height: 28 };
         q.ring = this.ringPath(colw - 6, 32, 700 + k);
         q.ringStyle = { ...q.ringStyle, left: -4, top: -3, width: colw - 6, height: 32 };
@@ -823,7 +850,7 @@ class Component extends DCLogic {
         },
         teleWrap: {
           position: 'absolute', left: 20, right: 20, top: 46, zIndex: 60, textAlign: 'left',
-          fontSize: 9.5, fontWeight: 500, letterSpacing: '0.04em', color: '#8A8A80'
+          fontSize: 13, fontWeight: 500, letterSpacing: '0.04em', color: 'var(--muted)'
         },
         readLayer: { position: 'absolute', inset: 0, zIndex: 80 },
         jdPaneStyle: { position: 'absolute', left: 20, top: 70, width: cw, height: 92, background: 'none', boxShadow: 'none', zIndex: 88 },
@@ -835,7 +862,7 @@ class Component extends DCLogic {
         },
         controlsStyle: {
           position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 60, display: 'flex', alignItems: 'center',
-          gap: 16, padding: '13px 20px', background: 'rgba(232,233,228,0.95)', borderTop: '1px solid rgba(138,138,128,0.3)'
+          gap: 16, padding: '13px 20px', background: 'rgba(232,233,228,0.95)', borderTop: '1px solid rgba(var(--muted-rgb),0.3)'
         }
       });
     }
@@ -851,7 +878,7 @@ class Component extends DCLogic {
       reading, plain, jdOpen, lensOn,
       rootStyle: {
         position: 'relative', width: '100%', height: '100vh', minHeight: 600, overflow: 'hidden',
-        background: '#E8E9E4', fontFamily: 'Switzer, system-ui, sans-serif', color: '#191914',
+        background: 'var(--desk)', fontFamily: 'Satoshi, system-ui, sans-serif', color: 'var(--ink)',
         fontVariantNumeric: 'tabular-nums', cursor: lensOn ? 'none' : 'default'
       },
       panesLayer: { position: 'absolute', inset: 0, zIndex: 85, pointerEvents: 'none' },
@@ -859,26 +886,26 @@ class Component extends DCLogic {
       controlsStyle: { position: 'absolute', left: 26, bottom: 26, zIndex: 60, display: 'flex', alignItems: 'center', gap: 22 },
       teleWrap: {
         position: 'absolute', left: 0, right: 0, top: 24, zIndex: 60, textAlign: 'center',
-        fontSize: 11, fontWeight: 500, letterSpacing: '0.06em', color: '#8A8A80'
+        fontSize: 13, fontWeight: 500, letterSpacing: '0.06em', color: 'var(--muted)'
       },
-      jdLabelStyle: { position: 'absolute', left: 22, top: 18, fontSize: 9, letterSpacing: '0.12em', fontWeight: 500, color: '#8A8A80' },
-      jdTitleStyle: { position: 'absolute', left: 22, top: 40, right: 22, fontFamily: "'Cabinet Grotesk',sans-serif", fontWeight: 900, fontSize: 22, lineHeight: 1.02, letterSpacing: '-0.04em' },
-      jdHintStyle: { position: 'absolute', left: 22, bottom: 18, right: 22, fontSize: 9, letterSpacing: '0.12em', color: '#8A8A80' },
+      jdLabelStyle: { position: 'absolute', left: 22, top: 18, fontSize: 12.5, letterSpacing: '0.12em', fontWeight: 500, color: 'var(--muted)' },
+      jdTitleStyle: { position: 'absolute', left: 22, top: 40, right: 22, fontFamily: "'Clash Display',sans-serif", fontWeight: 700, fontSize: 22, lineHeight: 1.02, letterSpacing: '-0.04em' },
+      jdHintStyle: { position: 'absolute', left: 22, bottom: 18, right: 22, fontSize: 12.5, letterSpacing: '0.12em', color: 'var(--muted)' },
       stageStyle: {
         position: 'absolute', inset: 0, perspective: '2000px', perspectiveOrigin: '50% 42%',
         cursor: lensOn ? 'none' : 'default'
       },
       readLayer: { position: 'absolute', inset: 0, zIndex: 80 },
       jdPaneStyle: {
-        position: 'absolute', left: jdX, top: jdY, width: jdW, height: jdH, background: '#FDFDFB', cursor: 'pointer',
-        boxShadow: '0 2px 4px rgba(25,25,20,.12), 0 36px 62px rgba(25,25,20,.16)', zIndex: 88
+        position: 'absolute', left: jdX, top: jdY, width: jdW, height: jdH, background: 'var(--paper)', cursor: 'pointer',
+        boxShadow: '0 2px 4px rgba(var(--shadow-rgb),.12), 0 36px 62px rgba(var(--shadow-rgb),.16)', zIndex: 88
       },
       threadSvg: { position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 86, pointerEvents: 'none' },
       notesStyle: {
         position: 'absolute', left: docX, top: docY + docH + 16, width: docW, zIndex: 90,
         display: 'flex', flexDirection: 'column', gap: 8
       },
-      closeRead: () => this.setState({ open: null, hoverThread: null }),
+      closeRead: () => this.setState({ open: null, hoverThread: null, plain: !!st.fromList, fromList: false }),
       openJd: (e) => { e.stopPropagation(); this.ensureFlags(); this.setState({ jdOpen: true, open: null }); },
       closeJd: () => this.setState({ jdOpen: false }),
       stop: (e) => e.stopPropagation(),
@@ -891,9 +918,9 @@ class Component extends DCLogic {
       metricName: this.metrics && this.metrics.ndcg5 != null ? 'NDCG' : 'SPREAD',
       acceptLabel: acc ? 'accepted' : 'accept',
       acceptBtn: {
-        marginTop: 10, padding: '5px 11px', border: '1px solid ' + (acc ? 'rgba(138,138,128,.5)' : '#191914'),
-        background: acc ? 'none' : '#191914', color: acc ? '#8A8A80' : '#FDFDFB', font: 'inherit',
-        fontSize: 9.5, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: acc ? 'default' : 'pointer'
+        marginTop: 10, padding: '5px 11px', border: '1px solid ' + (acc ? 'rgba(var(--muted-rgb),.5)' : 'var(--ink)'),
+        background: acc ? 'none' : 'var(--ink)', color: acc ? 'var(--muted)' : 'var(--paper)', font: 'inherit',
+        fontSize: 13, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: acc ? 'default' : 'pointer'
       },
       jdocLayer: { position: 'absolute', inset: 0, zIndex: 92 },
       jdocGroup: {
@@ -901,31 +928,36 @@ class Component extends DCLogic {
         transform: 'translate(-50%,-50%) scale(' + jk.toFixed(4) + ')'
       },
       jdocStyle: {
-        position: 'absolute', left: 0, top: 0, width: rw, height: jdocH, background: '#FDFDFB', cursor: 'default',
-        boxShadow: '0 3px 6px rgba(25,25,20,.14), 0 60px 90px rgba(25,25,20,.22)'
+        position: 'absolute', left: 0, top: 0, width: rw, height: jdocH, background: 'var(--paper)', cursor: 'default',
+        boxShadow: '0 3px 6px rgba(var(--shadow-rgb),.14), 0 60px 90px rgba(var(--shadow-rgb),.22)'
       },
       cmtWrap: { position: 'absolute', left: rw + 34, top: 0, width: 236, height: jdocH },
-      cmt1: { position: 'absolute', left: 0, top: 396, width: 236, paddingLeft: 13, borderLeft: '2px solid #2B4FD8' },
-      cmt2: { position: 'absolute', left: 0, top: 492, width: 236, paddingLeft: 13, borderLeft: '2px solid #8A8A80' },
+      cmt1: { position: 'absolute', left: 0, top: 396, width: 236, paddingLeft: 13, borderLeft: '2px solid var(--azurite)' },
+      cmt2: { position: 'absolute', left: 0, top: 492, width: 236, paddingLeft: 13, borderLeft: '2px solid var(--muted)' },
       strikeSpan: {
         position: 'relative', backgroundImage: this.strikeBg(11), backgroundRepeat: 'no-repeat',
         backgroundPosition: 'left center', backgroundSize: (acc ? '100%' : '0%') + ' 100%',
         transition: 'background-size 560ms cubic-bezier(.4,0,.3,1)'
       },
       replSpan: {
-        position: 'absolute', left: 0, top: -16, fontSize: 11, color: '#2B4FD8', whiteSpace: 'nowrap',
+        position: 'absolute', left: 0, top: -16, fontSize: 13, color: 'var(--azurite)', whiteSpace: 'nowrap',
         opacity: acc ? 1 : 0, transition: 'opacity 300ms ease 440ms'
       },
       flagSpan: {
         backgroundImage: this.hlBg(21), backgroundSize: '100% 84%', backgroundPosition: '0 62%',
-        backgroundRepeat: 'no-repeat', mixBlendMode: 'multiply'
+        backgroundRepeat: 'no-repeat', mixBlendMode: 'var(--hl-blend)'
       },
       jdReqList: this.REQS.map((q) => q[1]),
       plainStyle: {
-        position: 'absolute', inset: 0, zIndex: 120, background: '#E8E9E4', overflowY: 'auto',
+        position: 'absolute', inset: 0, zIndex: 120, background: 'var(--desk)', overflowY: 'auto',
         padding: '76px 32px 60px'
       },
-      togglePlain: () => this.setState({ plain: !plain, open: null, jdOpen: false }),
+      togglePlain: () => this.setState({ plain: !plain, open: null, jdOpen: false, fromList: false }),
+      plainLabel: plain ? 'table' : 'list',
+      plainCount: this.DATA.length + ' candidates',
+      scoreBig: reading ? (this.DATA[open][7] * 100).toFixed(0) : '',
+      scoreSub: reading ? 'rank ' + String(rk[open].rank).padStart(2, '0') + ' of ' + this.DATA.length + ' · ' + this.DATA[open][0] : '',
+      scoreSub2: reading ? 'keyword ' + (this.DATA[open][2] * 100).toFixed(0) + ' · semantic ' + (this.DATA[open][3] * 100).toFixed(0) : '',
       ...mobOv
     };
   }
@@ -968,12 +1000,12 @@ class Component extends DCLogic {
       };
 
       const paper = {
-        position: 'absolute', inset: 0, background: '#FDFDFB', overflow: 'visible', cursor: 'pointer',
-        boxShadow: (focus === i ? '0 0 0 1.5px #191914, ' : '') + (dealt
+        position: 'absolute', inset: 0, background: 'var(--paper)', overflow: 'visible', cursor: 'pointer',
+        boxShadow: (focus === i ? '0 0 0 1.5px var(--ink), ' : '') + (dealt
           ? (top
-            ? '0 2px 3px rgba(25,25,20,.13), 0 30px 52px rgba(25,25,20,.17)'
-            : '0 1px 2px rgba(25,25,20,.11), 0 11px 24px rgba(25,25,20,.085)')
-          : '0 7px 12px rgba(25,25,20,.05), 0 46px 64px rgba(25,25,20,.10)'),
+            ? '0 2px 3px rgba(var(--shadow-rgb),.13), 0 30px 52px rgba(var(--shadow-rgb),.17)'
+            : '0 1px 2px rgba(var(--shadow-rgb),.11), 0 11px 24px rgba(var(--shadow-rgb),.085)')
+          : '0 7px 12px rgba(var(--shadow-rgb),.05), 0 46px 64px rgba(var(--shadow-rgb),.10)'),
         transition: 'box-shadow 700ms cubic-bezier(.2,.8,.3,1)',
         transitionDelay: (dealt && phase === 'idle' ? dealDelay : 0) + 'ms'
       };
@@ -989,13 +1021,13 @@ class Component extends DCLogic {
           return {
             d: m.d, fill: '#D8FF3E', stroke: 'none', sw: 0,
             style: {
-              mixBlendMode: 'multiply', transformBox: 'fill-box', transformOrigin: '0% 50%',
+              mixBlendMode: 'var(--hl-blend)', transformBox: 'fill-box', transformOrigin: '0% 50%',
               transform: marked ? undefined : 'scaleX(0)',
               animation: marked ? 'cal-swipe 230ms ' + d + 'ms cubic-bezier(.32,.72,.4,1) both' : 'none'
             }
           };
         }
-        const col = m.kind === 'b' ? '#2B4FD8' : '#E23B2E';
+        const col = m.kind === 'b' ? 'var(--azurite)' : 'var(--red)';
         return {
           d: m.d, fill: 'none', stroke: col, sw: m.kind === 'b' ? 1.3 : 1.5,
           style: {
@@ -1022,21 +1054,21 @@ class Component extends DCLogic {
           animation: isGem ? 'cal-gem 620ms 980ms ease-in-out both' : 'none'
         },
         rankStyle: {
-          position: 'absolute', left: 13, top: 8, fontFamily: "'Cabinet Grotesk',sans-serif", fontWeight: 900,
-          fontSize: 28, letterSpacing: '-0.04em', lineHeight: 1, color: dim ? '#8A8A80' : '#191914', pointerEvents: 'none',
+          position: 'absolute', left: 13, top: 8, fontFamily: "'Clash Display',sans-serif", fontWeight: 700,
+          fontSize: 34, letterSpacing: '-0.04em', lineHeight: 1, color: dim ? 'var(--muted)' : 'var(--ink)', pointerEvents: 'none',
           opacity: sorted ? 1 : 0, transition: 'opacity 400ms ease ' + ((R.rank - 1) * 25 + 260) + 'ms, color 500ms ease'
         },
         rankLabel: sorted ? String(R.rank).padStart(2, '0') : '',
         scoreStyle: {
-          position: 'absolute', right: 14, top: 15, fontSize: 11, fontWeight: 500, color: '#8A8A80', pointerEvents: 'none',
+          position: 'absolute', right: 14, top: 15, fontSize: 13, fontWeight: 500, color: 'var(--muted)', pointerEvents: 'none',
           opacity: sorted ? 1 : 0, transition: 'opacity 400ms ease ' + ((R.rank - 1) * 25 + 300) + 'ms'
         },
         scoreLabel: sorted ? R.s.toFixed(2) : '',
         gemStyle: {
           position: 'absolute', top: -9, left: 112, width: 50, height: 17,
-          background: '#D8FF3E', color: '#191914', fontSize: 9.5, fontWeight: 500, letterSpacing: '0.02em',
+          background: '#D8FF3E', color: 'var(--ink)', fontSize: 13, fontWeight: 500, letterSpacing: '0.02em',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transform: 'rotate(-1.6deg)', boxShadow: '0 1px 2px rgba(25,25,20,.18)',
+          transform: 'rotate(-1.6deg)', boxShadow: '0 1px 2px rgba(var(--shadow-rgb),.18)',
           opacity: isGem ? 1 : 0, pointerEvents: 'none',
           transition: 'opacity 320ms ease ' + (isGem ? 900 : 0) + 'ms'
         },
@@ -1055,13 +1087,13 @@ class Component extends DCLogic {
 
     const t = (b, on) => ({
       position: 'relative', width: 30, height: 15, borderRadius: 8,
-      background: on ? '#D8FF3E' : 'rgba(25,25,20,.13)', transition: 'background 240ms ease', display: 'block'
+      background: on ? '#D8FF3E' : 'rgba(var(--shadow-rgb),.13)', transition: 'background 240ms ease', display: 'block'
     });
     const k = (on) => ({
       position: 'absolute', top: 2.5, left: on ? 17 : 2.5, width: 10, height: 10, borderRadius: 5,
-      background: on ? '#191914' : '#FDFDFB', transition: 'left 240ms cubic-bezier(.3,1.3,.4,1)'
+      background: on ? 'var(--ink)' : 'var(--paper)', transition: 'left 240ms cubic-bezier(.3,1.3,.4,1)'
     });
-    const btn = { display: 'flex', alignItems: 'center', gap: 9, background: 'none', border: 'none', padding: 0, margin: 0, color: '#191914', font: 'inherit', cursor: 'pointer' };
+    const btn = { display: 'flex', alignItems: 'center', gap: 9, background: 'none', border: 'none', padding: 0, margin: 0, color: 'var(--ink)', font: 'inherit', cursor: 'pointer' };
 
     return {
       ...this.extraVals(w, h),
@@ -1081,8 +1113,8 @@ class Component extends DCLogic {
         transitionDelay: dealt && phase === 'idle' ? '760ms' : '0ms'
       },
       jdPaper: {
-        position: 'absolute', inset: 0, background: '#FDFDFB', cursor: 'pointer',
-        boxShadow: dealt ? '0 1px 2px rgba(25,25,20,.11), 0 14px 30px rgba(25,25,20,.10)' : '0 8px 14px rgba(25,25,20,.05), 0 50px 70px rgba(25,25,20,.10)',
+        position: 'absolute', inset: 0, background: 'var(--paper)', cursor: 'pointer',
+        boxShadow: dealt ? '0 1px 2px rgba(var(--shadow-rgb),.11), 0 14px 30px rgba(var(--shadow-rgb),.10)' : '0 8px 14px rgba(var(--shadow-rgb),.05), 0 50px 70px rgba(var(--shadow-rgb),.10)',
         transition: 'box-shadow 700ms ease 760ms'
       },
       scanStyle: {
@@ -1099,7 +1131,9 @@ class Component extends DCLogic {
       semTrack: t(0, this.state.sem), semKnob: k(this.state.sem),
       ndcgLabel: this.state.ndcg.toFixed(2),
       toggleKw: () => this.setToggle('kw'),
-      toggleSem: () => this.setToggle('sem')
+      toggleSem: () => this.setToggle('sem'),
+      themeLabel: this.dark() ? 'light' : 'dark',
+      toggleTheme: () => this.setTheme(this.dark() ? 'light' : 'dark')
     };
   }
 }
