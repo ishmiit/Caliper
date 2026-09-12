@@ -45,8 +45,7 @@ def jd():
 @app.post("/api/run")
 def run(jd_text: Optional[str] = None):
     with LOCK:
-        text = jd_text or session.jd_text or default_jd()
-        session.ingest(text)
+        session.ingest(jd_text or default_jd())
         return session.rank()
 
 

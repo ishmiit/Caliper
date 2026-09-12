@@ -53,9 +53,9 @@ data/     skill_ontology.json · bias_lexicon.json · resumes/ · Sample_JD · l
 
 ## Demo beats
 
-1. **Run** → engine log ticks (real timings) → board lands with spread.
-2. Click the **Hidden Gem** row → receipt: every requirement, verdict, both channel scores, quoted resume line. Click a quote → resume scrolls to the line.
-3. Flip **Semantic** off → board re-ranks, the gem falls. Flip back.
-4. **Ask the graph**: "Why is #1 above #2?" → head-to-head waterfall with citations.
-5. **JD Audit** → "3+ years" on an intern role: hard-filter would reject N of 18 → **Accept** → board re-ranks live.
-6. **Evaluate** → ablation table, sliders, radar.
+1. **Chamber** — black, one statement. Press enter (sample pool) or drop the JD + resumes.
+2. **Analysis** — the engine reads out what it did, with real numbers, then a hard cut to bone.
+3. **Console** — pool left (the hidden-gem row inverts), the reading centre (every requirement, its verdict rule, the quoted line, `inferred · 1 hop · line 9 · 0.75`), the brief right as a coverage glyph. Flip `keyword` / `semantic` in the bar: rows FLIP to their new ranks. Ask the graph at the bottom of the reading.
+4. **Redline** — the JD with margin comments. Accept the "3+ years" edit: strikethrough draws in azurite, the pool re-ranks behind it.
+
+Keys 1–4 jump between screens.
