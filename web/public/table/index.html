@@ -31,9 +31,6 @@ a:hover{color:var(--ink);}
 
   <a href="./start.html" style="position:absolute;left:26px;top:24px;z-index:60;font-size:22px;font-weight:600;letter-spacing:0.30em;color:var(--ink);text-decoration:none;font-family:'Clash Display',sans-serif;">CALIPER</a>
 
-  <div style="{{ teleWrap }}">
-    <span ref="{{ teleRef }}"></span>
-  </div>
 
   <div ref="{{ stageRef }}" style="{{ stageStyle }}">
     <div style="{{ planeStyle }}">
@@ -530,7 +527,8 @@ class Component extends DCLogic {
       });
       const d = c.depth || {};
       const roles = (d.internship || 0) + (d.professional || 0);
-      const sub = (c.months_experience ? c.months_experience + ' mo dated' : 'no dated experience') + ' \u00b7 ' + roles + ' in roles \u00b7 ' + (d.listed || 0) + ' listed';
+      const met = c.per_requirement.filter((p) => ['CONFIRMED', 'STATED', 'INFERRED'].includes(p.verdict)).length;
+      const sub = met + ' of ' + c.per_requirement.length + ' requirements';
       const allv = c.per_requirement.map((p) => p.verdict);
       const summary = allv.filter((v) => v === 'CONFIRMED').length + ' confirmed · ' + allv.filter((v) => v === 'INFERRED').length + ' inferred · ' + allv.filter((v) => v === 'STATED').length + ' stated · ' + allv.filter((v) => v === 'MISSING' || v === 'WEAK').length + ' missing of ' + allv.length;
       return [c.name, sub, c.score_keyword_only / 100, c.score_semantic_only / 100, 0, texts.map((t) => this.shorten(t, 52)), evidence, c.final_score / 100, c.candidate_id, !!c.hidden_gem, c.integrity || [], summary];
