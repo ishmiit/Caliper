@@ -20,6 +20,20 @@ First backend start takes ~20s (loads MiniLM). After that a full run over 18 res
 2. Press **Run**. Or use **Upload** to drag files in from the UI.
 3. Go to **Evaluate**, label each candidate strong/medium/weak, press **Save & measure** → nDCG@5 / Spearman ρ and the ablation table appear from real measurements.
 
+## The organiser pool — what we did with it
+
+The "Dummy Resumes" zip is 198 resumes across PDF, DOCX, XML and TXT, mostly the same people in several formats. We do not train on it (there is no model to train) — we use it three ways:
+
+1. **Format robustness.** The parser now reads all four formats (`pdfplumber → PyMuPDF`, `python-docx` with a raw-XML fallback, structured XML with tag-to-section mapping).
+2. **Free ground truth.** Filenames carry the target role, so against the Full Stack JD: dev roles = strong, adjacent tech = medium, non-tech = weak. `scripts/benchmark.py` ranks the whole pool and reports nDCG@5 / Spearman ρ plus the ablation table.
+3. **Threshold tuning.** `--tune` sweeps τ_lex, τ_sem, α and the must-have weight. The grid is flat (ρ 0.66–0.67), so defaults were kept.
+
+Measured on 198 resumes: top 12 all dev roles, bottom 5 all non-tech, nDCG@5 = 1.00, ρ = 0.66. Removing the ontology drops ρ to 0.62; cohort calibration lifts score spread from 73 to 80.
+
+```
+unzip the pool into data/pool/    then    python scripts/benchmark.py data/pool --tune
+```
+
 ## How the matching works (the judge walkthrough)
 
 ```

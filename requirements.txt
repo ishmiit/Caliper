@@ -8,3 +8,4 @@ sentence-transformers
 numpy
 scipy
 scikit-learn
+python-docx

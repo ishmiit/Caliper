@@ -55,6 +55,10 @@ def extract_text(path: Path):
     suffix = path.suffix.lower()
     if suffix in (".txt", ".md"):
         return path.read_text(encoding="utf-8", errors="ignore"), "text"
+    if suffix == ".docx":
+        return _docx_text(path), "docx"
+    if suffix == ".xml":
+        return _xml_text(path), "xml"
     text = ""
     try:
         import pdfplumber
@@ -75,6 +79,53 @@ def extract_text(path: Path):
     if text.strip():
         return text, "pdfplumber"
     return "", "failed"
+
+
+def _docx_text(path: Path):
+    try:
+        import docx
+        d = docx.Document(str(path))
+        lines = [p.text for p in d.paragraphs]
+        for t in d.tables:
+            for row in t.rows:
+                lines.append(" | ".join(c.text for c in row.cells))
+        return "\n".join(lines)
+    except Exception:
+        import zipfile
+        with zipfile.ZipFile(str(path)) as z:
+            xml = z.read("word/document.xml").decode("utf-8", "ignore")
+        xml = re.sub(r"</w:p>", "\n", xml)
+        return re.sub(r"<[^>]+>", "", xml)
+
+
+def _xml_text(path: Path):
+    """Structured XML resumes: emit one line per leaf, promoting section-like tags to headers."""
+    import xml.etree.ElementTree as ET
+    HEADERS = {"education": "EDUCATION", "experience": "EXPERIENCE", "workexperience": "EXPERIENCE", "internships": "EXPERIENCE", "projects": "PROJECTS", "technicalskills": "SKILLS", "skills": "SKILLS", "certifications": "CERTIFICATIONS", "achievements": "ACHIEVEMENTS"}
+    try:
+        root = ET.fromstring(path.read_bytes())
+    except Exception:
+        return re.sub(r"<[^>]+>", "\n", path.read_text(encoding="utf-8", errors="ignore"))
+    out = []
+
+    def walk(el, depth):
+        tag = el.tag.lower()
+        if tag in HEADERS and depth <= 2:
+            out.append("")
+            out.append(HEADERS[tag])
+        text = (el.text or "").strip()
+        kids = list(el)
+        if text and not kids:
+            prefix = "- " if depth >= 3 else ""
+            out.append(prefix + " ".join(text.split()))
+        for k in kids:
+            walk(k, depth + 1)
+            tail = (k.tail or "").strip()
+            if tail:
+                out.append(tail)
+
+    walk(root, 0)
+    return "\n".join(out)
 
 
 def classify_header(line: str):
@@ -216,7 +267,7 @@ def parse_resume(path: Path, resume_id: str) -> Resume:
 
 
 def load_resumes(folder: Path):
-    files = sorted([p for p in folder.iterdir() if p.suffix.lower() in (".pdf", ".txt", ".md")])
-    pdfs = [p for p in files if p.suffix.lower() == ".pdf"]
-    files = pdfs if pdfs else files
+    files = sorted([p for p in folder.iterdir() if p.suffix.lower() in (".pdf", ".docx", ".xml", ".txt", ".md")])
+    rich = [p for p in files if p.suffix.lower() in (".pdf", ".docx", ".xml")]
+    files = rich if rich else files
     return [parse_resume(p, f"r{i+1:02d}") for i, p in enumerate(files)]

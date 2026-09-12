@@ -1,0 +1,55 @@
+{
+  "n": 198,
+  "methods": {
+    "docx": 122,
+    "pdfplumber": 54,
+    "xml": 22
+  },
+  "labels": {
+    "3": 39,
+    "2": 60,
+    "1": 99
+  },
+  "metrics": {
+    "ndcg5": 1.0,
+    "spearman": 0.659,
+    "n_labelled": 198
+  },
+  "ablation": [
+    {
+      "config": "Keyword only",
+      "ndcg5": 1.0,
+      "spearman": 0.66,
+      "n_labelled": 198,
+      "spread": 68.5
+    },
+    {
+      "config": "Semantic only",
+      "ndcg5": 1.0,
+      "spearman": 0.627,
+      "n_labelled": 198,
+      "spread": 65.2
+    },
+    {
+      "config": "Fused (Caliper)",
+      "ndcg5": 1.0,
+      "spearman": 0.659,
+      "n_labelled": 198,
+      "spread": 80.3
+    },
+    {
+      "config": "Fused \u2212 ontology",
+      "ndcg5": 1.0,
+      "spearman": 0.619,
+      "n_labelled": 198,
+      "spread": 80.9
+    },
+    {
+      "config": "Fused \u2212 calibration",
+      "ndcg5": 1.0,
+      "spearman": 0.661,
+      "n_labelled": 198,
+      "spread": 73.1
+    }
+  ]
+}
