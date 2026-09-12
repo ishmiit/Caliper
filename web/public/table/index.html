@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="./vendor/fonts.css">
+<style>
+html,body{margin:0;padding:0;background:#E8E9E4;}
+*{box-sizing:border-box;}
+a{color:#2B4FD8;text-decoration:none;}
+a:hover{color:#191914;}
+@keyframes cal-swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes cal-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes cal-lift{0%{transform:translateZ(0)}42%{transform:translateZ(16px)}100%{transform:translateZ(0)}}
+@keyframes cal-gem{0%,100%{opacity:1}28%{opacity:.2}62%{opacity:1}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" onMouseMove="{{ onRootMove }}" style="position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden;background:#E8E9E4;font-family:Switzer,system-ui,sans-serif;color:#191914;font-variant-numeric:tabular-nums;">
+
+  <div style="position:absolute;left:26px;top:24px;z-index:60;font-size:11px;font-weight:500;letter-spacing:0.34em;">CALIPER</div>
+
+  <div style="{{ teleWrap }}">
+    <span ref="{{ teleRef }}"></span>
+  </div>
+
+  <div ref="{{ stageRef }}" style="{{ stageStyle }}">
+    <div style="{{ planeStyle }}">
+
+      <div style="{{ scanStyle }}"></div>
+
+      <div style="{{ jdStyle }}">
+        <div style="{{ jdPaper }}" onClick="{{ openJd }}">
+          <div style="position:absolute;left:18px;top:16px;font-size:9px;letter-spacing:0.12em;font-weight:500;color:#8A8A80;">JOB DESCRIPTION</div>
+          <div style="position:absolute;left:18px;top:38px;right:18px;font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:17px;line-height:1.05;letter-spacing:-0.04em;">{{ jdShort1 }}<br>{{ jdShort2 }}</div>
+          <sc-for list="{{ jdRules }}" as="r" hint-placeholder-count="9">
+            <div style="{{ r }}"></div>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-for list="{{ sheets }}" as="s" hint-placeholder-count="18">
+        <div style="{{ s.pos }}">
+          <div style="{{ s.lift }}">
+            <div style="{{ s.paper }}" onClick="{{ s.onOpen }}" onMouseMove="{{ s.onMove }}">
+              <div style="{{ s.rankStyle }}">{{ s.rankLabel }}</div>
+              <div style="{{ s.scoreStyle }}">{{ s.scoreLabel }}</div>
+              <div style="position:absolute;left:14px;top:44px;right:14px;pointer-events:none;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:12px;letter-spacing:-0.03em;line-height:1;">{{ s.name }}</div>
+              <div style="position:absolute;left:14px;top:60px;right:14px;pointer-events:none;font-size:7px;letter-spacing:0.02em;color:#8A8A80;">{{ s.role }}</div>
+              <sc-for list="{{ s.rules }}" as="r" hint-placeholder-count="10">
+                <div style="{{ r }}"></div>
+              </sc-for>
+              <svg viewBox="0 0 190 260" style="{{ s.marksStyle }}">
+                <sc-for list="{{ s.marks }}" as="m" hint-placeholder-count="4">
+                  <path d="{{ m.d }}" fill="{{ m.fill }}" stroke="{{ m.stroke }}" stroke-width="{{ m.sw }}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" style="{{ m.style }}"></path>
+                </sc-for>
+              </svg>
+              <div style="{{ s.gemStyle }}">{{ s.gemLabel }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+
+    </div>
+  </div>
+
+  <div style="{{ controlsStyle }}">
+    <button onClick="{{ toggleKw }}" style="{{ kwBtn }}">
+      <span style="{{ kwTrack }}"><span style="{{ kwKnob }}"></span></span>
+      <span style="font-size:11px;font-weight:500;letter-spacing:0.02em;">keyword</span>
+    </button>
+    <button onClick="{{ toggleSem }}" style="{{ semBtn }}">
+      <span style="{{ semTrack }}"><span style="{{ semKnob }}"></span></span>
+      <span style="font-size:11px;font-weight:500;letter-spacing:0.02em;">semantic</span>
+    </button>
+    <div style="display:flex;align-items:baseline;gap:7px;padding-left:20px;border-left:1px solid rgba(138,138,128,0.35);">
+      <span style="font-size:9px;letter-spacing:0.12em;color:#8A8A80;">{{ metricName }}</span>
+      <span style="font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.02em;">{{ ndcgLabel }}</span>
+    </div>
+  </div>
+
+  <sc-if value="{{ reading }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeRead }}" style="{{ readLayer }}">
+      <div style="{{ jdPaneStyle }}" onClick="{{ openJd }}">
+        <div style="{{ jdLabelStyle }}">JOB DESCRIPTION</div>
+        <div style="{{ jdTitleStyle }}">{{ jdTitle }}</div>
+        <sc-for list="{{ reqs }}" as="q" hint-placeholder-count="6">
+          <div style="{{ q.wrap }}">
+            <div style="{{ q.wash }}"></div>
+            <div style="{{ q.text }}">{{ q.label }}</div>
+            <svg viewBox="{{ q.vb }}" preserveAspectRatio="none" style="{{ q.ringStyle }}">
+              <path d="{{ q.ring }}" fill="none" stroke="#E23B2E" stroke-width="1.1" stroke-linecap="round"></path>
+            </svg>
+          </div>
+        </sc-for>
+        <div style="{{ jdHintStyle }}">CLICK TO OPEN THE DRAFT</div>
+      </div>
+      <svg style="{{ threadSvg }}">
+        <sc-for list="{{ threads }}" as="t" hint-placeholder-count="4">
+          <path d="{{ t.d }}" fill="none" stroke="{{ t.stroke }}" stroke-width="{{ t.sw }}" pathLength="1" style="{{ t.style }}" onMouseEnter="{{ t.enter }}" onMouseLeave="{{ t.leave }}"></path>
+        </sc-for>
+      </svg>
+      <div style="{{ notesStyle }}">
+        <sc-for list="{{ notes }}" as="n" hint-placeholder-count="2">
+          <div style="{{ n.style }}">{{ n.text }}</div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="{{ panesLayer }}">
+    <sc-for list="{{ panes }}" as="p" hint-placeholder-count="1">
+      <div style="{{ p.wrap }}" ref="{{ p.ref }}" onClick="{{ p.onTap }}">
+        <div style="{{ p.inner }}" ref="{{ p.innerRef }}">
+          <div style="{{ p.paperBg }}"></div>
+          <div style="position:absolute;left:25px;top:66px;right:25px;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:21px;letter-spacing:-0.03em;line-height:1;">{{ p.name }}</div>
+          <div style="position:absolute;left:25px;top:97px;right:25px;font-size:11px;color:#8A8A80;">{{ p.role }}</div>
+          <sc-for list="{{ p.lines }}" as="l" hint-placeholder-count="10">
+            <div style="{{ l.style }}">{{ l.t }}</div>
+          </sc-for>
+          <svg viewBox="0 0 190 260" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;">
+            <sc-for list="{{ p.marks }}" as="m" hint-placeholder-count="4">
+              <path d="{{ m.d }}" fill="{{ m.fill }}" stroke="{{ m.stroke }}" stroke-width="{{ m.sw }}" stroke-linecap="round" stroke-linejoin="round" style="{{ m.style }}"></path>
+            </sc-for>
+          </svg>
+          <sc-for list="{{ p.labels }}" as="b" hint-placeholder-count="4">
+            <div style="{{ b.style }}">{{ b.t }}</div>
+          </sc-for>
+        </div>
+        <div style="{{ p.rankStyle }}">{{ p.rankLabel }}</div>
+        <div style="{{ p.rim }}"></div>
+      </div>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ jdOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeJd }}" style="{{ jdocLayer }}">
+      <div style="{{ jdocGroup }}">
+      <div style="{{ jdocStyle }}" onClick="{{ stop }}">
+        <div style="position:absolute;left:40px;top:32px;font-size:9px;letter-spacing:0.12em;font-weight:500;color:#8A8A80;">JOB DESCRIPTION · DRAFT</div>
+        <div style="position:absolute;left:40px;top:54px;right:44px;font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:26px;letter-spacing:-0.04em;line-height:1;">{{ jdTitle }}</div>
+        <div style="position:absolute;left:40px;top:104px;right:44px;font-size:12px;line-height:1.45;color:#191914;">{{ jdAbout }}</div>
+        <div style="position:absolute;left:40px;top:204px;font-size:9px;letter-spacing:0.12em;font-weight:500;color:#8A8A80;">MUST-HAVE REQUIREMENTS</div>
+        <div style="position:absolute;left:40px;top:226px;right:44px;display:flex;flex-direction:column;gap:6px;font-size:11.5px;line-height:1.3;">
+          <sc-for list="{{ jdReqList }}" as="q" hint-placeholder-count="7">
+            <div>{{ q }}</div>
+          </sc-for>
+        </div>
+        <div style="position:absolute;left:40px;top:428px;right:44px;display:flex;flex-direction:column;gap:12px;font-size:11.5px;line-height:1.4;">
+          <sc-for list="{{ jdFlagLines }}" as="fl" hint-placeholder-count="2">
+            <div style="position:relative;">
+              <sc-for list="{{ fl.spans }}" as="sp" hint-placeholder-count="3">
+                <span style="{{ sp.style }}">{{ sp.t }}</span>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="{{ cmtWrap }}" onClick="{{ stop }}">
+        <sc-for list="{{ jdCards }}" as="cd" hint-placeholder-count="2">
+          <div style="{{ cd.style }}">
+            <div style="font-size:11px;font-weight:500;">{{ cd.title }}</div>
+            <div style="font-size:10.5px;line-height:1.4;color:#8A8A80;margin-top:4px;">{{ cd.body }}</div>
+            <sc-if value="{{ cd.canAccept }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ cd.accept }}" style="{{ cd.btn }}">{{ cd.label }}</button>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ plain }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ plainStyle }}">
+      <div style="max-width:840px;margin:0 auto;">
+        <div style="font-size:9px;letter-spacing:0.12em;color:#8A8A80;margin-bottom:24px;">PLAIN MODE · PRESS P TO RETURN TO THE TABLE</div>
+        <sc-for list="{{ plainRows }}" as="r" hint-placeholder-count="18">
+          <div style="display:grid;grid-template-columns:38px 1fr 210px 52px;gap:16px;align-items:baseline;padding:11px 0;border-bottom:1px solid rgba(138,138,128,0.25);">
+            <div style="font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.03em;">{{ r.rank }}</div>
+            <div style="font-size:13px;font-weight:500;">{{ r.name }}</div>
+            <div style="font-size:10.5px;color:#8A8A80;">{{ r.ev }}</div>
+            <div style="font-size:13px;text-align:right;">{{ r.score }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <button onClick="{{ togglePlain }}" title="plain mode" style="position:absolute;right:22px;bottom:24px;z-index:130;width:9px;height:9px;border-radius:50%;border:none;padding:0;background:rgba(25,25,20,0.22);cursor:pointer;"></button>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;tilt&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:14,&quot;min&quot;:0,&quot;max&quot;:22,&quot;step&quot;:1,&quot;unit&quot;:&quot;deg&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Table&quot;},&quot;scanMs&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:2200,&quot;min&quot;:1200,&quot;max&quot;:4000,&quot;step&quot;:100,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Table&quot;}}">
+class Component extends DCLogic {
+  state = { w: 1280, h: 800, phase: 'idle', dealt: false, kw: true, sem: true, accepted: false, ndcg: 0.91,
+    lensDoc: null, open: null, jdOpen: false, plain: false, hoverThread: null, focus: -1 };
+
+  REQS = [];
+  DATA = [];
+  graph = null; byId = {}; flags = null; acceptedIds = {}; metrics = null; tele = { n: 0, chunks: 0, pairs: 0, s: 0 };
+  GEM = -1;
+  SW = 190; SH = 260;
+
+  rng(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t += 0x6D2B79F5;
+      let x = t;
+      x = Math.imul(x ^ (x >>> 15), 1 | x);
+      x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+      return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  lineY(i) { return 80 + i * 16; }
+  lineW(t) { return Math.min(162, 2.55 * t.length); }
+
+  KW = {};
+
+  phraseSpan(line, req) {
+    const ks = this.KW[req] || [];
+    let at = -1, kl = 0;
+    const low = line.toLowerCase();
+    ks.forEach((k) => { const p = low.indexOf(String(k).toLowerCase()); if (p >= 0 && (at < 0 || p < at)) { at = p; kl = k.length; } });
+    if (at < 0) { at = 0; kl = Math.min(line.length, 20); }
+    let end = at + kl, hops = 0;
+    while (end < line.length && hops < 2) { const nx = line.indexOf(' ', end + 1); if (nx < 0) { end = line.length; break; } end = nx; hops++; }
+    return { s: at, e: Math.min(end, line.length) };
+  }
+
+  hlBg(seed) {
+    const r = this.rng(seed);
+    const d = this.hlPath(1, 6, 98, 9.5, r);
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'><path d='" + d + "' fill='#D8FF3E'/></svg>";
+    return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+  }
+
+  strikeBg(seed) {
+    const r = this.rng(seed);
+    const d = this.strikePath(1, 6, 98, r);
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'><path d='" + d + "' fill='none' stroke='#E23B2E' stroke-width='1.3' stroke-linecap='round'/></svg>";
+    return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+  }
+
+  ringPath(w, hh, seed) {
+    const r = this.rng(seed), j = () => r() * 2.4 - 1.2;
+    const cx = w / 2, cy = hh / 2, rx = w / 2 - 2, ry = hh / 2 - 1.5;
+    let d = '';
+    const start = -0.5;
+    for (let i = 0; i <= 30; i++) {
+      const a = start + (i / 30) * Math.PI * 2.12;
+      const x = (cx + Math.cos(a) * (rx + j())).toFixed(1);
+      const y = (cy + Math.sin(a) * (ry + j() * 0.5)).toFixed(1);
+      d += (i === 0 ? 'M ' : ' L ') + x + ' ' + y;
+    }
+    return d;
+  }
+
+  hlPath(x, y, w, th, r) {
+    const n = 7, j = () => r() * 1.9 - 0.95;
+    let d = 'M ' + (x - 1.2 + j()).toFixed(1) + ' ' + (y - th / 2 + j()).toFixed(1);
+    for (let i = 1; i <= n; i++) d += ' L ' + (x + w * i / n).toFixed(1) + ' ' + (y - th / 2 + j()).toFixed(1);
+    d += ' L ' + (x + w + 1.6 + j()).toFixed(1) + ' ' + (y + th / 2 + j()).toFixed(1);
+    for (let i = n - 1; i >= 0; i--) d += ' L ' + (x + w * i / n).toFixed(1) + ' ' + (y + th / 2 + j()).toFixed(1);
+    return d + ' Z';
+  }
+
+  tickPath(x, y, r) {
+    const j = () => r() * 0.8 - 0.4;
+    return 'M ' + (x + j()).toFixed(1) + ' ' + (y + j()).toFixed(1) +
+      ' C ' + (x + 1.4).toFixed(1) + ' ' + (y + 2.2 + j()).toFixed(1) +
+      ' ' + (x + 2.1).toFixed(1) + ' ' + (y + 3.6 + j()).toFixed(1) +
+      ' ' + (x + 3).toFixed(1) + ' ' + (y + 4.2).toFixed(1) +
+      ' C ' + (x + 4.4 + j()).toFixed(1) + ' ' + (y - 1.4).toFixed(1) +
+      ' ' + (x + 6.2).toFixed(1) + ' ' + (y - 4.8 + j()).toFixed(1) +
+      ' ' + (x + 8.4).toFixed(1) + ' ' + (y - 7.4 + j()).toFixed(1);
+  }
+
+  strikePath(x, y, w, r) {
+    const n = 5, j = () => r() * 1.5 - 0.75;
+    let d = 'M ' + (x - 2).toFixed(1) + ' ' + (y + j()).toFixed(1);
+    for (let i = 1; i <= n; i++) d += ' L ' + (x + w * i / n + 2).toFixed(1) + ' ' + (y + j()).toFixed(1);
+    return d;
+  }
+
+  scatter = [];
+  sheetData = [];
+  buildScatter() { return this.DATA.map((c, i) => {
+    const r = this.rng(1471 + i * 97);
+    const col = i % 6, row = Math.floor(i / 6);
+    return { x: 418 + col * 186 + (r() * 58 - 29), y: 74 + row * 252 + (r() * 56 - 28), rot: r() * 8 - 4 };
+  }); }
+
+  buildSheetData() { return this.DATA.map((c, i) => {
+    const r = this.rng(6203 + i * 41);
+    const marks = [], labels = [];
+    const ev = c[6].filter((e) => e[1] !== 'm').slice().sort((a, b) => (a[2] || 0) - (b[2] || 0));
+    const seenLi = {};
+    ev.forEach((e) => {
+      const li = e[2], line = c[5][li] || '';
+      const u = this.lineW(line) / Math.max(1, line.length);
+      const sp = this.phraseSpan(line, e[0]);
+      const x = 14 + sp.s * u, w = Math.max(18, (sp.e - sp.s) * u);
+      marks.push({ kind: 'h', d: this.hlPath(x, this.lineY(li), w, 7.4, r) });
+      if (e[1] === 'i') marks.push({ kind: 'b', d: this.tickPath(170, this.lineY(li) - 1, r) });
+      if (seenLi[li]) return; seenLi[li] = true;
+      labels.push({
+        li, x, t: e[1] === 'i'
+          ? 'inferred · ' + (e[5] || 1) + ' hop · ' + (e[3] || 0).toFixed(2)
+          : (e[5] || 'confirmed') + ' · line ' + (li + 1),
+        color: e[1] === 'i' ? '#2B4FD8' : '#191914'
+      });
+    });
+    return { marks, labels };
+  }); }
+
+  stageRef = React.createRef();
+  teleRef = React.createRef();
+  rootRef = React.createRef();
+  lensRef = React.createRef();
+  lensInnerRef = React.createRef();
+  L = { x: -400, y: -400, tx: -400, ty: -400, lx: 95, ly: 130 };
+
+  onRootMove(e) {
+    const el = this.rootRef.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    this.L.tx = e.clientX - r.left; this.L.ty = e.clientY - r.top;
+    const h = this._hit; this._hit = null;
+    if (h !== this.state.lensDoc) this.setState({ lensDoc: h });
+  }
+
+  onSheetMove(i, e) {
+    this._hit = i;
+    this.L.lx = e.nativeEvent.offsetX; this.L.ly = e.nativeEvent.offsetY;
+  }
+
+  lensLoop() {
+    const L = this.L, st = this.state;
+    const on = st.lensDoc != null && st.open == null && !st.jdOpen && !st.plain && st.w >= 760;
+    L.x += (L.tx - L.x) * 0.15; L.y += (L.ty - L.y) * 0.15;
+    const a = this.lensRef.current, b = this.lensInnerRef.current;
+    if (a) a.style.transform = on ? 'translate3d(' + (L.x - 95) + 'px,' + (L.y - 95) + 'px,0)' : 'translate3d(-9999px,-9999px,0)';
+    if (b && on) b.style.transform = 'translate3d(' + (95 - L.lx * 1.8) + 'px,' + (95 - L.ly * 1.8) + 'px,0)';
+    this._lraf = requestAnimationFrame(() => this.lensLoop());
+  }
+
+  onKey(e) {
+    const k = e.key;
+    if (k === 'p' || k === 'P') { this.setState({ plain: !this.state.plain, open: null, jdOpen: false }); return; }
+    if (k === 'Escape') { this.setState({ open: null, jdOpen: false, hoverThread: null }); return; }
+    if (this.state.phase !== 'sorted' || this.state.plain) return;
+    const order = this.rankOrder();
+    if (k === 'ArrowRight' || k === 'ArrowLeft' || k === 'ArrowDown' || k === 'ArrowUp') {
+      e.preventDefault();
+      const step = k === 'ArrowRight' ? 1 : k === 'ArrowLeft' ? -1 : k === 'ArrowDown' ? 6 : -6;
+      const cur = this.state.focus < 0 ? 0 : order.indexOf(this.state.focus);
+      const nx = Math.max(0, Math.min(order.length - 1, (this.state.focus < 0 ? 0 : cur + step)));
+      this.setState({ focus: order[nx] });
+    } else if (k === 'Enter' && this.state.focus >= 0) {
+      this.setState({ open: this.state.focus, hoverThread: null });
+    }
+  }
+
+  rankOrder() {
+    const { wk, ws } = this.weights();
+    const rk = this.ranking(wk, ws);
+    return this.DATA.map((c, i) => i).sort((a, b) => rk[a].rank - rk[b].rank);
+  }
+
+  componentDidMount() {
+    this.measure();
+    this._onResize = () => this.measure();
+    window.addEventListener('resize', this._onResize);
+    this._onKey = (e) => this.onKey(e);
+    window.addEventListener('keydown', this._onKey);
+    this.lensLoop();
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.setTele('reading the pool  \u00b7  local');
+    this.api('/api/run', {}).then((g) => {
+      this.loadGraph(g);
+      this.setTele(this.tele.n + ' documents  \u00b7  1 job description  \u00b7  local');
+      if (reduced) { this.setState({ dealt: true, phase: 'sorted' }); return; }
+      this._t = [
+        setTimeout(() => this.setState({ dealt: true }), 80),
+        setTimeout(() => { this.setState({ phase: 'scan' }); this.runTele(); }, 1320),
+        setTimeout(() => this.setState({ phase: 'sorted' }), 3700)
+      ];
+    }).catch((e) => this.setTele('engine unreachable \u00b7 start the API on 127.0.0.1:8000'));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('keydown', this._onKey);
+    (this._t || []).forEach(clearTimeout);
+    cancelAnimationFrame(this._raf);
+    cancelAnimationFrame(this._lraf);
+    cancelAnimationFrame(this._nraf);
+  }
+
+  measure() {
+    const el = this.rootRef.current || this.stageRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    if (r.width && (r.width !== this.state.w || r.height !== this.state.h)) this.setState({ w: r.width, h: r.height });
+  }
+
+  setTele(t) { if (this.teleRef.current) this.teleRef.current.textContent = t; }
+
+  runTele() {
+    const dur = this.props.scanMs ?? 2200;
+    const t0 = performance.now();
+    const step = () => {
+      const p = Math.min(1, (performance.now() - t0) / dur);
+      const e = p * p * (3 - 2 * p);
+      this.setTele(
+        Math.round(this.tele.chunks * e) + ' evidence chunks   \u00b7   ' +
+        Math.round(this.tele.pairs * e) + ' pairs scored   \u00b7   ' +
+        (this.tele.s * e).toFixed(2) + 's   \u00b7   local'
+      );
+      if (p < 1) this._raf = requestAnimationFrame(step);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+
+  weights() {
+    const { kw, sem } = this.state;
+    return { wk: kw ? 0.42 : 0, ws: sem ? 0.58 : 0 };
+  }
+
+  scoreOf(c, wk, ws) {
+    if (!wk && !ws) return 0;
+    return c[7];
+  }
+
+  ranking(wk, ws) {
+    const rows = this.DATA.map((c, i) => ({ i, s: this.scoreOf(c, wk, ws) }));
+    rows.sort((a, b) => b.s - a.s || this.DATA[a.i][0].localeCompare(this.DATA[b.i][0]));
+    const map = {};
+    rows.forEach((r, k) => { map[r.i] = { rank: k + 1, s: r.s }; });
+    return map;
+  }
+
+  gridPos(k) {
+    const col = k % 6, row = Math.floor(k / 6);
+    return { x: 402 + col * 199, y: 34 + row * 284, rot: 0 };
+  }
+
+  ndcgTarget() {
+    const { kw, sem } = this.state;
+    if (!kw && !sem) return 0;
+    if (this.metrics && this.metrics.ndcg5 != null) return this.metrics.ndcg5;
+    return this.spread();
+  }
+
+  spread() {
+    const v = this.DATA.map((c) => c[7]);
+    return v.length ? Math.max(...v) - Math.min(...v) : 0;
+  }
+
+  api(path, body) {
+    const o = body === undefined ? { method: 'GET' } : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) };
+    return fetch(path, o).then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json(); });
+  }
+
+  applyScores(g) {
+    g.candidates.forEach((c) => { const i = this.byId[c.candidate_id]; if (i != null) this.DATA[i][7] = c.final_score / 100; });
+    this.metrics = g.metrics || null;
+    this.forceUpdate();
+  }
+
+  setToggle(k) {
+    const st = { kw: this.state.kw, sem: this.state.sem }; st[k] = !st[k];
+    this.setState(st);
+    this.api('/api/rank', { config: { keyword_on: st.kw, semantic_on: st.sem } }).then((g) => { this.applyScores(g); this.animNdcg(); }).catch(() => this.animNdcg());
+  }
+
+  shorten(t, n) { return t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '\u2026' : t; }
+
+  loadGraph(g) {
+    this.graph = g;
+    const must = g.requirements.filter((r) => r.priority === 'must_have');
+    const pick = must.filter((r) => r.type !== 'responsibility' && r.type !== 'soft_skill').concat(must.filter((r) => r.type === 'responsibility')).slice(0, 7);
+    const seen = {}; const picked = pick.filter((r) => { if (seen[r.label]) return false; seen[r.label] = true; return true; });
+    this.REQS = picked.map((r) => [r.req_id, r.label]);
+    const KW = {}; picked.forEach((r) => { KW[r.req_id] = (r.terms || []).slice(); });
+    const byId = {};
+    this.DATA = g.candidates.map((c, i) => {
+      byId[c.candidate_id] = i;
+      const rows = picked.map((r) => c.per_requirement.find((p) => p.req_id === r.req_id)).filter(Boolean);
+      const chosen = {};
+      const want = (p) => { const ev = p.evidence[0]; if (ev && !chosen[ev.text]) chosen[ev.text] = ev.line; };
+      rows.slice().sort((a, b) => b.contribution - a.contribution).forEach(want);
+      c.per_requirement.slice().sort((a, b) => b.contribution - a.contribution).forEach((p) => { if (Object.keys(chosen).length < 10) want(p); });
+      c.per_requirement.forEach((p) => p.evidence.slice(1).forEach((ev) => { if (Object.keys(chosen).length < 10 && ev && !chosen[ev.text]) chosen[ev.text] = ev.line; }));
+      const texts = Object.keys(chosen).sort((a, b) => chosen[a] - chosen[b]).slice(0, 10);
+      const idx = {}; texts.forEach((t, k) => { idx[t] = k; });
+      const evidence = rows.map((p) => {
+        const ev = p.evidence[0];
+        const ok = ['CONFIRMED', 'STATED', 'INFERRED'].includes(p.verdict) && ev && ev.method !== 'negated' && idx[ev.text] != null;
+        if (!ok) return [p.req_id, 'm'];
+        if (ev.matched) KW[p.req_id].push(ev.matched);
+        if (p.verdict === 'INFERRED') return [p.req_id, 'i', idx[ev.text], p.fit, p.note, ev.hops || 1];
+        return [p.req_id, 'c', idx[ev.text], p.fit, p.note, p.verdict.toLowerCase()];
+      });
+      const d = c.depth || {};
+      const roles = (d.internship || 0) + (d.professional || 0);
+      const sub = (c.months_experience ? c.months_experience + ' mo dated' : 'no dated experience') + ' \u00b7 ' + roles + ' in roles \u00b7 ' + (d.listed || 0) + ' listed';
+      return [c.name, sub, c.score_keyword_only / 100, c.score_semantic_only / 100, 0, texts.map((t) => this.shorten(t, 60)), evidence, c.final_score / 100, c.candidate_id, !!c.hidden_gem, c.integrity || []];
+    });
+    this.KW = KW; this.byId = byId;
+    this.GEM = this.DATA.findIndex((x) => x[9]);
+    this.metrics = g.metrics || null;
+    const L = g.log || [];
+    const find = (p) => L.find((l) => l.step.toLowerCase().startsWith(p)) || {};
+    this.tele = { n: g.candidates.length, chunks: find('evidence').chunks || 0, pairs: find('scored').pairs || 0, s: ((find('done').ms || 0) / 1000) };
+    this.scatter = this.buildScatter();
+    this.sheetData = this.buildSheetData();
+    this.setState({ ndcg: this.ndcgTarget() });
+  }
+
+  jdFlagLines() {
+    const t = (this.graph && this.graph.jd_text) || '';
+    const raw = t.split(/\r?\n/).map((l) => l.replace(/^[\s\u2022\-\*]+/, '').trim());
+    const lines = [];
+    raw.forEach((l) => { const last = lines.length ? lines[lines.length - 1] : ''; if (l && last && !/[.:;]$/.test(last) && /^[a-z(,&]/.test(l)) lines[lines.length - 1] = last + ' ' + l; else lines.push(l); });
+    const flags = this.flags || [];
+    const out = [];
+    flags.forEach((f) => {
+      const li = lines.findIndex((l) => l.toLowerCase().includes(f.phrase.toLowerCase()));
+      if (li < 0 || out.some((o) => o.li === li)) return;
+      const line = lines[li], p = line.toLowerCase().indexOf(f.phrase.toLowerCase());
+      const acc = !!this.acceptedIds[f.id];
+      const spans = [{ t: line.slice(0, p), style: {} }];
+      spans.push({ t: line.slice(p, p + f.phrase.length), style: acc ? {
+        position: 'relative', backgroundImage: this.strikeBg(11 + li), backgroundRepeat: 'no-repeat', backgroundPosition: 'left center', backgroundSize: '100% 100%', color: '#8A8A80'
+      } : { backgroundImage: this.hlBg(21 + li), backgroundSize: '100% 84%', backgroundPosition: '0 62%', backgroundRepeat: 'no-repeat', mixBlendMode: 'multiply' } });
+      if (acc && f.replacement) spans.push({ t: ' ' + f.replacement, style: { color: '#2B4FD8' } });
+      spans.push({ t: line.slice(p + f.phrase.length), style: {} });
+      out.push({ li, spans });
+    });
+    return out.slice(0, 3);
+  }
+
+  jdCards() {
+    const flags = this.flags;
+    const n = this.DATA.length;
+    if (!flags) return [{ title: 'Reading the brief', body: 'Checking each phrase against the pool.', canAccept: false, style: { position: 'absolute', left: 0, top: 396, width: 236, paddingLeft: 13, borderLeft: '2px solid #8A8A80' } }];
+    if (!flags.length) return [{ title: 'Nothing narrows the pool', body: 'No phrase in this brief excludes a candidate.', canAccept: false, style: { position: 'absolute', left: 0, top: 396, width: 236, paddingLeft: 13, borderLeft: '2px solid #8A8A80' } }];
+    const impact = (f) => ((f.counterfactual && f.counterfactual.movers && f.counterfactual.movers.length) || 0) * 100 + ((f.hard_filter && f.hard_filter.rejects) || 0);
+    return flags.slice().sort((a, b) => impact(b) - impact(a)).slice(0, 3).map((f, k) => {
+      const movers = (f.counterfactual && f.counterfactual.movers && f.counterfactual.movers.length) || 0;
+      const rejects = (f.hard_filter && f.hard_filter.rejects) || 0;
+      const body = movers ? 'Holds back ' + movers + ' of ' + n + ' candidates in this pool.' : rejects ? 'A hard filter here rejects ' + rejects + ' of ' + n + '.' : 'No measurable pool effect. Legal exposure only.';
+      const acc = !!this.acceptedIds[f.id];
+      const title = ({ experience_contradiction: 'Experience on an internship', age_proxy: 'Age-coded phrasing', gender_coded: 'Gender-coded phrasing', credential_inflation: 'Credential gate', culture_vagueness: 'Culture-fit phrasing', ability_coded: 'Ability-coded phrasing' })[f.category] || f.label;
+      return {
+        title, body: acc ? body + ' Accepted \u00b7 board re-ranked.' : body,
+        canAccept: !!f.replacement, label: acc ? 'accepted' : 'accept',
+        accept: (e) => { e.stopPropagation(); this.acceptFlag(f); },
+        btn: {
+          marginTop: 10, padding: '5px 11px', border: '1px solid ' + (acc ? 'rgba(138,138,128,.5)' : '#191914'),
+          background: acc ? 'none' : '#191914', color: acc ? '#8A8A80' : '#FDFDFB', font: 'inherit',
+          fontSize: 9.5, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: acc ? 'default' : 'pointer'
+        },
+        style: { position: 'absolute', left: 0, top: 380 + k * 96, width: 236, paddingLeft: 13, borderLeft: '2px solid ' + (impact(f) > 0 ? '#2B4FD8' : '#8A8A80') }
+      };
+    });
+  }
+
+  jdTitleText() {
+    const t = (this.graph && this.graph.jd_title) || '';
+    return t.split('|')[0].trim() || 'Job description';
+  }
+
+  jdAboutText() {
+    const t = (this.graph && this.graph.jd_text) || '';
+    const lines = t.split(/\r?\n/).map((l) => l.trim());
+    let i = lines.findIndex((l) => /^about/i.test(l));
+    const out = [];
+    for (let k = (i >= 0 ? i + 1 : 1); k < lines.length; k++) { if (!lines[k]) { if (out.length) break; continue; } if (/^[A-Z][A-Z\s\-]{5,}$/.test(lines[k])) { if (out.length) break; continue; } out.push(lines[k]); }
+    return this.shorten(out.join(' '), 260);
+  }
+
+  ensureFlags() {
+    if (this.flags || this._flagsLoading) return;
+    this._flagsLoading = true;
+    this.api('/api/audit').then((r) => { this.flags = r.flags || []; this._flagsLoading = false; this.forceUpdate(); }).catch(() => { this.flags = []; this._flagsLoading = false; this.forceUpdate(); });
+  }
+
+  acceptFlag(f) {
+    if (this.acceptedIds[f.id]) return;
+    this.api('/api/audit/apply/' + f.id, {}).then((g) => { this.acceptedIds[f.id] = true; this.applyScores(g); this.setState({ accepted: true }, () => this.animNdcg()); });
+  }
+
+  animNdcg() {
+    cancelAnimationFrame(this._nraf);
+    const from = this.state.ndcg, to = this.ndcgTarget(), t0 = performance.now();
+    const step = () => {
+      const p = Math.min(1, (performance.now() - t0) / 520);
+      this.setState({ ndcg: from + (to - from) * (p * p * (3 - 2 * p)) });
+      if (p < 1) this._nraf = requestAnimationFrame(step);
+    };
+    this._nraf = requestAnimationFrame(step);
+  }
+
+  docLine(k) { return 144 + k * 28.8; }
+
+  makeDoc(i, hoverLi) {
+    const c = this.DATA[i], sd = this.sheetData[i], acc = this.state.accepted;
+    if (!c || !sd) return { name: '', role: '', lines: [], marks: [], labels: [] };
+    const lines = c[5].map((t, k) => ({
+      t,
+      style: {
+        position: 'absolute', left: 25, top: this.docLine(k) - 6, fontSize: 10, lineHeight: '12px',
+        color: '#191914', whiteSpace: 'nowrap', letterSpacing: '-0.002em',
+        backgroundImage: k === hoverLi ? this.hlBg(880 + k) : 'none',
+        backgroundSize: '100% 130%', backgroundPosition: '0 50%', backgroundRepeat: 'no-repeat'
+      }
+    }));
+    const marks = sd.marks.filter((m) => !(m.kind === 'r' && acc)).map((m) => m.kind === 'h'
+      ? { d: m.d, fill: '#D8FF3E', stroke: 'none', sw: 0, style: { mixBlendMode: 'multiply' } }
+      : { d: m.d, fill: 'none', stroke: m.kind === 'b' ? '#2B4FD8' : '#E23B2E', sw: m.kind === 'b' ? 1.3 : 1.5, style: {} });
+    const labels = sd.labels.map((b) => ({
+      t: b.t,
+      style: {
+        position: 'absolute', left: b.x * 1.8, top: this.docLine(b.li) + 8, fontSize: 9,
+        letterSpacing: '0.01em', color: b.color, whiteSpace: 'nowrap'
+      }
+    }));
+    return { name: c[0], role: c[1], lines, marks, labels };
+  }
+
+  extraVals(w, h) {
+    const st = this.state;
+    const open = st.open, reading = open != null, jdOpen = st.jdOpen, plain = st.plain;
+    const mob = w < 760;
+    const lensOn = st.lensDoc != null && !reading && !jdOpen && !plain && !mob;
+    const paperBg = { position: 'absolute', inset: 0, background: '#FDFDFB' };
+
+    let rs = Math.min(1.52, (h - 215) / 468, (w - 600) / 342);
+    rs = Math.max(0.62, rs);
+    const docW = 342 * rs, docH = 468 * rs, jdW = 300;
+    let gap = 190, total = jdW + gap + docW;
+    if (total > w - 70) { gap = Math.max(90, w - 70 - jdW - docW); total = jdW + gap + docW; }
+    const startX = Math.max(20, (w - total) / 2);
+    const jdX = startX, docX = startX + jdW + gap;
+    const docY = Math.max(24, (h - docH) / 2 - 26);
+    const jdH = Math.max(420, docH), jdY = Math.max(18, docY + (docH - jdH) / 2);
+
+    const em = {};
+    if (reading) (this.DATA[open][6] || []).forEach((e) => { em[e[0]] = e; });
+    const hv = st.hoverThread;
+    const hoverLi = hv && em[hv] && em[hv][1] !== 'm' ? em[hv][2] : -1;
+
+    const panes = [{
+      key: 'lens', ref: this.lensRef, innerRef: this.lensInnerRef, paperBg,
+      wrap: {
+        position: 'absolute', left: 0, top: 0, width: 190, height: 190, borderRadius: '50%', overflow: 'hidden',
+        opacity: lensOn ? 1 : 0, transition: 'opacity 170ms ease', pointerEvents: 'none', zIndex: 95,
+        boxShadow: '0 10px 30px rgba(25,25,20,.18)'
+      },
+      inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468 },
+      rim: {
+        position: 'absolute', inset: 0, borderRadius: '50%', border: '1px solid rgba(25,25,20,.5)',
+        boxShadow: 'inset 0 12px 24px -14px rgba(25,25,20,.7)', pointerEvents: 'none'
+      },
+      rankStyle: { display: 'none' }, rankLabel: '', onTap: null,
+      ...this.makeDoc(st.lensDoc == null ? 0 : st.lensDoc, -1)
+    }];
+    if (reading) panes.push({
+      key: 'read', ref: null, innerRef: null, paperBg,
+      wrap: {
+        position: 'absolute', left: docX, top: docY, width: docW, height: docH, overflow: 'hidden', zIndex: 90,
+        background: '#FDFDFB', pointerEvents: 'auto',
+        boxShadow: '0 2px 4px rgba(25,25,20,.12), 0 44px 74px rgba(25,25,20,.18)'
+      },
+      inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468, transform: 'scale(' + rs + ')', transformOrigin: '0 0' },
+      rim: { display: 'none' }, rankStyle: { display: 'none' }, rankLabel: '', onTap: null,
+      ...this.makeDoc(open, hoverLi)
+    });
+
+    const reqs = this.REQS.map((q, k) => {
+      const e = em[q[0]], miss = !e || e[1] === 'm', on = hv === q[0];
+      return {
+        label: q[1],
+        wrap: { position: 'absolute', left: 22, top: 118 + k * 40, width: jdW - 44, height: 30 },
+        wash: {
+          position: 'absolute', left: -4, top: 1, width: '104%', height: 18, mixBlendMode: 'multiply',
+          backgroundImage: this.hlBg(300 + k), backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat',
+          opacity: on ? 1 : 0, transition: 'opacity 160ms ease'
+        },
+        text: {
+          position: 'absolute', left: 0, top: 2, right: 0, fontSize: 11.5, lineHeight: '15px',
+          color: miss ? '#8A8A80' : '#191914'
+        },
+        ring: this.ringPath(256, 26, 700 + k), vb: '0 0 256 26',
+        ringStyle: {
+          position: 'absolute', left: -7, top: -2, width: 256, height: 26, overflow: 'visible',
+          opacity: miss ? 1 : 0, transition: 'opacity 340ms ease 480ms'
+        }
+      };
+    });
+
+    const threads = [];
+    if (reading) this.REQS.forEach((q, k) => {
+      const e = em[q[0]];
+      if (!e || e[1] === 'm') return;
+      const x1 = jdX + jdW - 16, y1 = jdY + 118 + k * 40 + 10;
+      const x2 = docX + 3, y2 = docY + this.docLine(e[2]) * rs;
+      const dx = x2 - x1, sag = 32, inf = e[1] === 'i', other = hv != null && hv !== q[0];
+      threads.push({
+        d: 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' C ' + (x1 + dx * 0.42).toFixed(1) + ' ' + (y1 + sag).toFixed(1) +
+          ', ' + (x2 - dx * 0.42).toFixed(1) + ' ' + (y2 + sag).toFixed(1) + ', ' + x2.toFixed(1) + ' ' + y2.toFixed(1),
+        stroke: inf ? '#2B4FD8' : '#191914',
+        sw: hv === q[0] ? 2.6 : 1.1,
+        style: {
+          opacity: other ? 0.2 : inf ? 0.85 : 0.95, pointerEvents: 'stroke', cursor: 'pointer',
+          strokeDasharray: 1, transition: 'opacity 180ms ease, stroke-width 180ms ease',
+          animation: 'cal-draw 420ms ' + (k * 30 + 140) + 'ms cubic-bezier(.3,.8,.4,1) both'
+        },
+        enter: () => this.setState({ hoverThread: q[0] }),
+        leave: () => this.setState({ hoverThread: null })
+      });
+    });
+
+    const notes = reading ? (this.DATA[open][6] || []).filter((e) => e[1] === 'i').map((e) => ({
+      text: e[4],
+      style: { paddingLeft: 11, borderLeft: '2px solid #2B4FD8', fontSize: 10.5, lineHeight: '14px', color: '#6E6E66' }
+    })) : [];
+
+    const order = this.rankOrder();
+    const rk = this.ranking(this.weights().wk, this.weights().ws);
+    const plainRows = order.map((i) => {
+      const c = this.DATA[i], ev = c[6] || [];
+      return {
+        rank: String(rk[i].rank).padStart(2, '0'), name: c[0], role: c[1], score: rk[i].s.toFixed(2),
+        ev: ev.filter((e) => e[1] === 'c').length + ' confirmed · ' + ev.filter((e) => e[1] === 'i').length +
+          ' inferred · ' + ev.filter((e) => e[1] === 'm').length + ' missing'
+      };
+    });
+
+    const mobOv = {};
+    if (mob) {
+      const cw = w - 40, cs = cw / 342, chh = 468 * cs;
+      const cs2 = reading ? Math.min(cs, (h - 300) / 468) : cs;
+      const rch = 468 * cs2;
+      panes.length = 1;
+      if (!reading) order.forEach((i) => {
+        panes.push({
+          key: 'm' + i, ref: null, innerRef: null, paperBg,
+          wrap: {
+            position: 'relative', width: cw, height: chh, marginBottom: 18, background: '#FDFDFB',
+            overflow: 'hidden', pointerEvents: 'auto', cursor: 'pointer',
+            boxShadow: '0 1px 2px rgba(25,25,20,.11), 0 12px 26px rgba(25,25,20,.09)'
+          },
+          inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468, transform: 'scale(' + cs + ')', transformOrigin: '0 0' },
+          rim: { display: 'none' },
+          onTap: () => this.setState({ open: i, hoverThread: null }),
+          rankStyle: {
+            position: 'absolute', left: 14, top: 10, fontFamily: "'Cabinet Grotesk',sans-serif", fontWeight: 900,
+            fontSize: 26, letterSpacing: '-0.04em', lineHeight: 1, pointerEvents: 'none',
+            color: rk[i].rank > 12 ? '#8A8A80' : '#191914'
+          },
+          rankLabel: String(rk[i].rank).padStart(2, '0'),
+          ...this.makeDoc(i, -1)
+        });
+      });
+      else {
+        panes.push({
+          key: 'mread', ref: null, innerRef: null, paperBg,
+          wrap: {
+            position: 'absolute', left: 20, top: 250, width: 342 * cs2, height: rch, background: '#FDFDFB',
+            overflow: 'hidden', pointerEvents: 'auto',
+            boxShadow: '0 2px 4px rgba(25,25,20,.12), 0 32px 54px rgba(25,25,20,.16)'
+          },
+          inner: { position: 'absolute', left: 0, top: 0, width: 342, height: 468, transform: 'scale(' + cs2 + ')', transformOrigin: '0 0' },
+          rim: { display: 'none' }, rankStyle: { display: 'none' }, rankLabel: '', onTap: null,
+          ...this.makeDoc(open, hoverLi)
+        });
+        threads.length = 0;
+        this.REQS.forEach((q, k) => {
+          const e = em[q[0]];
+          if (!e || e[1] === 'm') return;
+          const col = k % 3, row = Math.floor(k / 3), colw = cw / 3;
+          const x1 = 20 + col * colw + colw / 2, y1 = 70 + row * 44 + 36;
+          const x2 = 48, y2 = 250 + this.docLine(e[2]) * cs2;
+          const inf = e[1] === 'i', other = hv != null && hv !== q[0];
+          threads.push({
+            d: 'M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' C ' + x1.toFixed(1) + ' ' + (y1 + 64).toFixed(1) +
+              ', ' + x2.toFixed(1) + ' ' + (y2 - 64).toFixed(1) + ', ' + x2.toFixed(1) + ' ' + y2.toFixed(1),
+            stroke: inf ? '#2B4FD8' : '#191914', sw: hv === q[0] ? 2.4 : 1,
+            style: {
+              opacity: other ? 0.2 : inf ? 0.85 : 0.95, pointerEvents: 'stroke', strokeDasharray: 1,
+              transition: 'opacity 180ms ease, stroke-width 180ms ease',
+              animation: 'cal-draw 420ms ' + (k * 30 + 140) + 'ms ease-out both'
+            },
+            enter: () => this.setState({ hoverThread: q[0] }),
+            leave: () => this.setState({ hoverThread: null })
+          });
+        });
+      }
+      reqs.forEach((q, k) => {
+        const col = k % 3, row = Math.floor(k / 3), colw = cw / 3;
+        q.wrap = { position: 'absolute', left: col * colw, top: row * 44, width: colw - 10, height: 38 };
+        q.text = { position: 'absolute', left: 0, top: 0, right: 0, fontSize: 10, lineHeight: '12.5px', color: q.text.color };
+        q.wash = { ...q.wash, top: -2, height: 28 };
+        q.ring = this.ringPath(colw - 6, 32, 700 + k);
+        q.ringStyle = { ...q.ringStyle, left: -4, top: -3, width: colw - 6, height: 32 };
+        q.vb = '0 0 ' + (colw - 6).toFixed(0) + ' 32';
+      });
+      Object.assign(mobOv, {
+        stageStyle: { display: 'none' },
+        lensOn: false,
+        panesLayer: {
+          position: 'absolute', inset: 0, zIndex: 85, pointerEvents: reading ? 'none' : 'auto',
+          overflowY: reading ? 'hidden' : 'auto', padding: reading ? 0 : '74px 20px 96px'
+        },
+        teleWrap: {
+          position: 'absolute', left: 20, right: 20, top: 46, zIndex: 60, textAlign: 'left',
+          fontSize: 9.5, fontWeight: 500, letterSpacing: '0.04em', color: '#8A8A80'
+        },
+        readLayer: { position: 'absolute', inset: 0, zIndex: 80 },
+        jdPaneStyle: { position: 'absolute', left: 20, top: 70, width: cw, height: 92, background: 'none', boxShadow: 'none', zIndex: 88 },
+        jdLabelStyle: { display: 'none' }, jdTitleStyle: { display: 'none' }, jdHintStyle: { display: 'none' },
+        threadSvg: { position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 86, pointerEvents: 'none' },
+        notesStyle: {
+          position: 'absolute', left: 20, top: 250 + rch + 14, width: cw, zIndex: 90,
+          display: 'flex', flexDirection: 'column', gap: 7
+        },
+        controlsStyle: {
+          position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 60, display: 'flex', alignItems: 'center',
+          gap: 16, padding: '13px 20px', background: 'rgba(232,233,228,0.95)', borderTop: '1px solid rgba(138,138,128,0.3)'
+        }
+      });
+    }
+
+    const acc = st.accepted;
+    const rw = Math.max(360, Math.min(600, w * 0.46)), jdocH = 540;
+    const jTotal = rw + 34 + 236;
+    const vh = Math.min(h, (typeof window !== 'undefined' && window.innerHeight) || h);
+    const jk = Math.min(1, (vh - 44) / jdocH, (w - 44) / jTotal);
+
+    return {
+      rootRef: this.rootRef, panes, reqs, threads, notes, plainRows,
+      reading, plain, jdOpen, lensOn,
+      rootStyle: {
+        position: 'relative', width: '100%', height: '100vh', minHeight: 600, overflow: 'hidden',
+        background: '#E8E9E4', fontFamily: 'Switzer, system-ui, sans-serif', color: '#191914',
+        fontVariantNumeric: 'tabular-nums', cursor: lensOn ? 'none' : 'default'
+      },
+      panesLayer: { position: 'absolute', inset: 0, zIndex: 85, pointerEvents: 'none' },
+      onRootMove: (e) => this.onRootMove(e),
+      controlsStyle: { position: 'absolute', left: 26, bottom: 26, zIndex: 60, display: 'flex', alignItems: 'center', gap: 22 },
+      teleWrap: {
+        position: 'absolute', left: 0, right: 0, top: 24, zIndex: 60, textAlign: 'center',
+        fontSize: 11, fontWeight: 500, letterSpacing: '0.06em', color: '#8A8A80'
+      },
+      jdLabelStyle: { position: 'absolute', left: 22, top: 18, fontSize: 9, letterSpacing: '0.12em', fontWeight: 500, color: '#8A8A80' },
+      jdTitleStyle: { position: 'absolute', left: 22, top: 40, right: 22, fontFamily: "'Cabinet Grotesk',sans-serif", fontWeight: 900, fontSize: 22, lineHeight: 1.02, letterSpacing: '-0.04em' },
+      jdHintStyle: { position: 'absolute', left: 22, bottom: 18, right: 22, fontSize: 9, letterSpacing: '0.12em', color: '#8A8A80' },
+      stageStyle: {
+        position: 'absolute', inset: 0, perspective: '2000px', perspectiveOrigin: '50% 42%',
+        cursor: lensOn ? 'none' : 'default'
+      },
+      readLayer: { position: 'absolute', inset: 0, zIndex: 80 },
+      jdPaneStyle: {
+        position: 'absolute', left: jdX, top: jdY, width: jdW, height: jdH, background: '#FDFDFB', cursor: 'pointer',
+        boxShadow: '0 2px 4px rgba(25,25,20,.12), 0 36px 62px rgba(25,25,20,.16)', zIndex: 88
+      },
+      threadSvg: { position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 86, pointerEvents: 'none' },
+      notesStyle: {
+        position: 'absolute', left: docX, top: docY + docH + 16, width: docW, zIndex: 90,
+        display: 'flex', flexDirection: 'column', gap: 8
+      },
+      closeRead: () => this.setState({ open: null, hoverThread: null }),
+      openJd: (e) => { e.stopPropagation(); this.ensureFlags(); this.setState({ jdOpen: true, open: null }); },
+      closeJd: () => this.setState({ jdOpen: false }),
+      stop: (e) => e.stopPropagation(),
+      jdTitle: this.jdTitleText(),
+      jdAbout: this.jdAboutText(),
+      jdShort1: this.jdTitleText().split(' ').slice(0, 3).join(' '),
+      jdShort2: this.jdTitleText().split(' ').slice(3).join(' '),
+      jdFlagLines: this.jdFlagLines(),
+      jdCards: this.jdCards(),
+      metricName: this.metrics && this.metrics.ndcg5 != null ? 'NDCG' : 'SPREAD',
+      acceptLabel: acc ? 'accepted' : 'accept',
+      acceptBtn: {
+        marginTop: 10, padding: '5px 11px', border: '1px solid ' + (acc ? 'rgba(138,138,128,.5)' : '#191914'),
+        background: acc ? 'none' : '#191914', color: acc ? '#8A8A80' : '#FDFDFB', font: 'inherit',
+        fontSize: 9.5, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: acc ? 'default' : 'pointer'
+      },
+      jdocLayer: { position: 'absolute', inset: 0, zIndex: 92 },
+      jdocGroup: {
+        position: 'absolute', left: '50%', top: vh / 2, width: jTotal, height: jdocH,
+        transform: 'translate(-50%,-50%) scale(' + jk.toFixed(4) + ')'
+      },
+      jdocStyle: {
+        position: 'absolute', left: 0, top: 0, width: rw, height: jdocH, background: '#FDFDFB', cursor: 'default',
+        boxShadow: '0 3px 6px rgba(25,25,20,.14), 0 60px 90px rgba(25,25,20,.22)'
+      },
+      cmtWrap: { position: 'absolute', left: rw + 34, top: 0, width: 236, height: jdocH },
+      cmt1: { position: 'absolute', left: 0, top: 396, width: 236, paddingLeft: 13, borderLeft: '2px solid #2B4FD8' },
+      cmt2: { position: 'absolute', left: 0, top: 492, width: 236, paddingLeft: 13, borderLeft: '2px solid #8A8A80' },
+      strikeSpan: {
+        position: 'relative', backgroundImage: this.strikeBg(11), backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'left center', backgroundSize: (acc ? '100%' : '0%') + ' 100%',
+        transition: 'background-size 560ms cubic-bezier(.4,0,.3,1)'
+      },
+      replSpan: {
+        position: 'absolute', left: 0, top: -16, fontSize: 11, color: '#2B4FD8', whiteSpace: 'nowrap',
+        opacity: acc ? 1 : 0, transition: 'opacity 300ms ease 440ms'
+      },
+      flagSpan: {
+        backgroundImage: this.hlBg(21), backgroundSize: '100% 84%', backgroundPosition: '0 62%',
+        backgroundRepeat: 'no-repeat', mixBlendMode: 'multiply'
+      },
+      jdReqList: this.REQS.map((q) => q[1]),
+      plainStyle: {
+        position: 'absolute', inset: 0, zIndex: 120, background: '#E8E9E4', overflowY: 'auto',
+        padding: '76px 32px 60px'
+      },
+      togglePlain: () => this.setState({ plain: !plain, open: null, jdOpen: false }),
+      ...mobOv
+    };
+  }
+
+  renderVals() {
+    const { w, h, phase, dealt, open, jdOpen, plain, hoverThread, focus } = this.state;
+    const tilt = this.props.tilt ?? 14;
+    const scanMs = this.props.scanMs ?? 2200;
+    const sorted = phase === 'sorted';
+    const s = Math.max(0.3, Math.min(w / 1680, h / 1000));
+    const { wk, ws } = this.weights();
+    const rank = this.ranking(wk, ws);
+    const kwRank = this.ranking(1, 0);
+    const reading = open != null;
+
+    const sheets = this.DATA.map((c, i) => {
+      const R = rank[i];
+      let base = sorted ? this.gridPos(R.rank - 1) : this.scatter[i];
+      if (reading && sorted) base = { x: 830 + (base.x - 830) * 1.34, y: 500 + (base.y - 500) * 1.4, rot: base.rot };
+      const top = sorted && R.rank === 1;
+      const sc = top && !reading ? 1.1 : 1;
+      const z = top ? 30 : 0;
+      const dim = sorted && R.rank > 12;
+      const dealDelay = i * 40;
+      const scanDelay = ((this.scatter[i].x + 95) / 1660) * scanMs;
+      const marked = phase === 'scan' || sorted;
+
+      const pos = {
+        position: 'absolute', left: 0, top: 0, width: this.SW, height: this.SH,
+        transformStyle: 'preserve-3d',
+        transform: dealt
+          ? 'translate3d(' + base.x + 'px,' + base.y + 'px,' + z + 'px) rotate(' + base.rot + 'deg) scale(' + sc + ')'
+          : 'translate3d(' + this.scatter[i].x + 'px,' + (this.scatter[i].y - 26) + 'px,110px) rotate(' + (this.scatter[i].rot * 1.6) + 'deg)',
+        opacity: dealt ? (open === i ? 0 : reading ? 0.55 : 1) : 0,
+        filter: reading ? 'saturate(0)' : 'none',
+        pointerEvents: reading || jdOpen ? 'none' : 'auto',
+        zIndex: sorted ? (top ? 40 : 20 - Math.floor(R.rank / 4)) : 10 + i,
+        transition: 'transform 880ms cubic-bezier(.17,1.16,.34,1), opacity 340ms ease-out, filter 500ms ease',
+        transitionDelay: (dealt && phase === 'idle' ? dealDelay : sorted ? (R.rank - 1) * 25 : 0) + 'ms'
+      };
+
+      const paper = {
+        position: 'absolute', inset: 0, background: '#FDFDFB', overflow: 'visible', cursor: 'pointer',
+        boxShadow: (focus === i ? '0 0 0 1.5px #191914, ' : '') + (dealt
+          ? (top
+            ? '0 2px 3px rgba(25,25,20,.13), 0 30px 52px rgba(25,25,20,.17)'
+            : '0 1px 2px rgba(25,25,20,.11), 0 11px 24px rgba(25,25,20,.085)')
+          : '0 7px 12px rgba(25,25,20,.05), 0 46px 64px rgba(25,25,20,.10)'),
+        transition: 'box-shadow 700ms cubic-bezier(.2,.8,.3,1)',
+        transitionDelay: (dealt && phase === 'idle' ? dealDelay : 0) + 'ms'
+      };
+
+      const rules = c[5].map((t, k) => ({
+        position: 'absolute', left: 14, top: this.lineY(k) - 1.3, width: this.lineW(t), height: 2.6,
+        background: '#CFCFC7', borderRadius: 1.3, pointerEvents: 'none'
+      }));
+
+      const mk = this.sheetData[i].marks.filter((m) => !(m.kind === 'r' && this.state.accepted)).map((m, k) => {
+        const d = scanDelay + k * 80;
+        if (m.kind === 'h') {
+          return {
+            d: m.d, fill: '#D8FF3E', stroke: 'none', sw: 0,
+            style: {
+              mixBlendMode: 'multiply', transformBox: 'fill-box', transformOrigin: '0% 50%',
+              transform: marked ? undefined : 'scaleX(0)',
+              animation: marked ? 'cal-swipe 230ms ' + d + 'ms cubic-bezier(.32,.72,.4,1) both' : 'none'
+            }
+          };
+        }
+        const col = m.kind === 'b' ? '#2B4FD8' : '#E23B2E';
+        return {
+          d: m.d, fill: 'none', stroke: col, sw: m.kind === 'b' ? 1.3 : 1.5,
+          style: {
+            strokeDasharray: 1, strokeDashoffset: marked ? undefined : 1,
+            animation: marked ? 'cal-draw 210ms ' + (d + 60) + 'ms ease-out both' : 'none'
+          }
+        };
+      });
+
+      const isGem = i === this.GEM && sorted;
+      const delta = kwRank[i].rank - R.rank;
+
+      return {
+        key: i, name: c[0], role: c[1], rules, marks: mk, pos, paper,
+        onOpen: () => this.setState({ open: i, focus: i, hoverThread: null, lensDoc: null }),
+        onMove: (e) => this.onSheetMove(i, e),
+        lift: {
+          position: 'absolute', inset: 0, transformStyle: 'preserve-3d',
+          animation: marked && phase === 'scan' ? 'cal-lift 460ms ' + scanDelay + 'ms cubic-bezier(.4,0,.3,1) both' : 'none'
+        },
+        marksStyle: {
+          position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', pointerEvents: 'none',
+          filter: dim ? 'saturate(0.1)' : 'none', transition: 'filter 600ms ease',
+          animation: isGem ? 'cal-gem 620ms 980ms ease-in-out both' : 'none'
+        },
+        rankStyle: {
+          position: 'absolute', left: 13, top: 8, fontFamily: "'Cabinet Grotesk',sans-serif", fontWeight: 900,
+          fontSize: 28, letterSpacing: '-0.04em', lineHeight: 1, color: dim ? '#8A8A80' : '#191914', pointerEvents: 'none',
+          opacity: sorted ? 1 : 0, transition: 'opacity 400ms ease ' + ((R.rank - 1) * 25 + 260) + 'ms, color 500ms ease'
+        },
+        rankLabel: sorted ? String(R.rank).padStart(2, '0') : '',
+        scoreStyle: {
+          position: 'absolute', right: 14, top: 15, fontSize: 11, fontWeight: 500, color: '#8A8A80', pointerEvents: 'none',
+          opacity: sorted ? 1 : 0, transition: 'opacity 400ms ease ' + ((R.rank - 1) * 25 + 300) + 'ms'
+        },
+        scoreLabel: sorted ? R.s.toFixed(2) : '',
+        gemStyle: {
+          position: 'absolute', top: -9, left: 112, width: 50, height: 17,
+          background: '#D8FF3E', color: '#191914', fontSize: 9.5, fontWeight: 500, letterSpacing: '0.02em',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transform: 'rotate(-1.6deg)', boxShadow: '0 1px 2px rgba(25,25,20,.18)',
+          opacity: isGem ? 1 : 0, pointerEvents: 'none',
+          transition: 'opacity 320ms ease ' + (isGem ? 900 : 0) + 'ms'
+        },
+        gemLabel: isGem ? '↑ ' + delta : ''
+      };
+    });
+
+    const jdR = this.rng(99);
+    const jdRules = [];
+    for (let k = 0; k < 9; k++) {
+      jdRules.push({
+        position: 'absolute', left: 18, top: 96 + k * 19, height: 2.6, borderRadius: 1.3,
+        width: 70 + jdR() * 134, background: '#CFCFC7'
+      });
+    }
+
+    const t = (b, on) => ({
+      position: 'relative', width: 30, height: 15, borderRadius: 8,
+      background: on ? '#D8FF3E' : 'rgba(25,25,20,.13)', transition: 'background 240ms ease', display: 'block'
+    });
+    const k = (on) => ({
+      position: 'absolute', top: 2.5, left: on ? 17 : 2.5, width: 10, height: 10, borderRadius: 5,
+      background: on ? '#191914' : '#FDFDFB', transition: 'left 240ms cubic-bezier(.3,1.3,.4,1)'
+    });
+    const btn = { display: 'flex', alignItems: 'center', gap: 9, background: 'none', border: 'none', padding: 0, margin: 0, color: '#191914', font: 'inherit', cursor: 'pointer' };
+
+    return {
+      ...this.extraVals(w, h),
+      stageRef: this.stageRef, teleRef: this.teleRef, sheets, jdRules,
+      planeStyle: {
+        position: 'absolute', left: '50%', top: '50%', width: 1660, height: 1000,
+        transform: 'translate(-50%,-50%) scale(' + (s * (jdOpen ? 0.94 : 1)).toFixed(4) + ') rotateX(' + tilt + 'deg)',
+        transformStyle: 'preserve-3d',
+        filter: jdOpen ? 'blur(3.5px)' : 'none',
+        transition: 'transform 620ms cubic-bezier(.2,.9,.3,1), filter 520ms ease'
+      },
+      jdStyle: {
+        position: 'absolute', left: 0, top: 0, width: 240, height: 330,
+        transform: 'translate3d(96px,300px,0px)', transformStyle: 'preserve-3d', zIndex: 5,
+        opacity: dealt ? (reading || jdOpen ? 0 : 1) : 0,
+        transition: 'transform 880ms cubic-bezier(.17,1.16,.34,1), opacity 340ms ease-out',
+        transitionDelay: dealt && phase === 'idle' ? '760ms' : '0ms'
+      },
+      jdPaper: {
+        position: 'absolute', inset: 0, background: '#FDFDFB', cursor: 'pointer',
+        boxShadow: dealt ? '0 1px 2px rgba(25,25,20,.11), 0 14px 30px rgba(25,25,20,.10)' : '0 8px 14px rgba(25,25,20,.05), 0 50px 70px rgba(25,25,20,.10)',
+        transition: 'box-shadow 700ms ease 760ms'
+      },
+      scanStyle: {
+        position: 'absolute', left: -70, top: -60, width: 2, height: 1120, background: '#D8FF3E',
+        boxShadow: '0 0 22px 7px rgba(216,255,62,.55), 0 0 70px 28px rgba(216,255,62,.20)',
+        opacity: phase === 'scan' ? 1 : 0, zIndex: 45, pointerEvents: 'none',
+        transform: 'translateX(' + (phase === 'idle' ? 0 : 1790) + 'px)',
+        transition: phase === 'scan'
+          ? 'transform ' + scanMs + 'ms linear, opacity 200ms ease'
+          : 'opacity 420ms ease'
+      },
+      kwBtn: btn, semBtn: btn,
+      kwTrack: t(0, this.state.kw), kwKnob: k(this.state.kw),
+      semTrack: t(0, this.state.sem), semKnob: k(this.state.sem),
+      ndcgLabel: this.state.ndcg.toFixed(2),
+      toggleKw: () => this.setToggle('kw'),
+      toggleSem: () => this.setToggle('sem')
+    };
+  }
+}
+</script>
+</body>
+</html>

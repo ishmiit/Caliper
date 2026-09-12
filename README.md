@@ -90,6 +90,10 @@ web/      React + Tailwind + framer-motion + recharts
 data/     skill_ontology.json · bias_lexicon.json · resumes/ · Sample_JD · labels.json
 ```
 
+## The table (current frontend)
+
+`web/public/table/` is the design-canvas export wired to the engine: `http://localhost:5173/` redirects to it. Sheets deal, the scanline sweeps, they sort into the ranked grid with real scores; hover for the lens, click a sheet for the reading with requirement threads, click the JD paper for the draft with margin comments and accept; `keyword` / `semantic` toggles and accept call the API. React, Babel and the fonts are vendored under `web/public/table/vendor/` so it runs with wifi off. The earlier console frontend is still at `/console.html`.
+
 ## Demo beats
 
 1. **Chamber** — black, one statement. Press enter (sample pool) or drop the JD + resumes.
