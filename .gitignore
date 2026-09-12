@@ -25,3 +25,6 @@ Thumbs.db
 data/pool/
 Dummy Resumes-*/
 Testing Dataset*/
+
+# Generated project report (local artifact, not source)
+Caliper_Project_Report.pdf
