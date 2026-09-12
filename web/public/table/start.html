@@ -9,115 +9,199 @@
   html, body { margin: 0; padding: 0; height: 100%; background: #E8E9E4; }
   * { box-sizing: border-box; }
   body { font-family: Switzer, system-ui, sans-serif; color: #191914; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; overflow: hidden; }
-  .root { position: relative; width: 100%; height: 100vh; min-height: 640px; }
+  .root { position: relative; width: 100%; height: 100vh; min-height: 640px; overflow: hidden; }
   .wordmark { position: absolute; left: 26px; top: 24px; z-index: 60; font-size: 11px; font-weight: 500; letter-spacing: 0.34em; }
-  .tele { position: absolute; left: 0; right: 0; top: 24px; text-align: center; font-size: 10.5px; letter-spacing: 0.06em; color: #8A8A80; }
-  .hero { position: absolute; left: 50%; top: 92px; transform: translateX(-50%); width: min(880px, calc(100% - 80px)); text-align: center; }
-  h1 { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 900; font-size: clamp(38px, 5.2vw, 64px); letter-spacing: -0.045em; line-height: 0.98; margin: 0; }
-  h1 .hl { background-image: var(--hl); background-size: 100% 84%; background-position: 0 62%; background-repeat: no-repeat; mix-blend-mode: multiply; padding: 0 4px; }
-  .sub { margin: 18px auto 0; max-width: 560px; font-size: 14px; line-height: 1.5; color: #55554E; }
+  .tele { position: absolute; left: 0; right: 0; top: 24px; text-align: center; font-size: 10.5px; letter-spacing: 0.06em; color: #8A8A80; z-index: 60; }
 
-  .stage { position: absolute; left: 50%; top: 330px; transform: translateX(-50%); width: 760px; height: 330px; perspective: 1400px; }
-  .paper { position: absolute; background: #FDFDFB; cursor: pointer; box-shadow: 0 2px 4px rgba(25,25,20,.12), 0 26px 44px rgba(25,25,20,.16); transition: transform 320ms cubic-bezier(.2,.7,.2,1), box-shadow 320ms ease; }
-  .paper:hover, .paper.over { transform: translateY(-8px) rotate(var(--rot)) scale(1.02); box-shadow: 0 4px 8px rgba(25,25,20,.14), 0 44px 70px rgba(25,25,20,.22); }
-  .paper .lab { position: absolute; left: 20px; top: 18px; font-size: 9px; letter-spacing: 0.12em; font-weight: 500; color: #8A8A80; }
-  .paper .ttl { position: absolute; left: 20px; top: 40px; right: 20px; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: -0.04em; line-height: 1.02; }
-  .paper .rule { position: absolute; left: 20px; height: 1.5px; background: rgba(25,25,20,.13); }
-  .paper .drop { position: absolute; left: 20px; right: 20px; bottom: 18px; height: 54px; border: 1px dashed rgba(25,25,20,.35); display: flex; align-items: center; justify-content: center; font-size: 10.5px; letter-spacing: 0.04em; color: #8A8A80; text-align: center; padding: 0 10px; }
-  .paper.has .drop { border-style: solid; border-color: rgba(25,25,20,.6); color: #191914; }
-  .paper .mark { position: absolute; height: 9px; background-image: var(--hl); background-size: 100% 100%; background-repeat: no-repeat; opacity: 0; transition: opacity 260ms ease; mix-blend-mode: multiply; }
-  .paper.has .mark { opacity: 1; }
-  .jd { width: 250px; height: 330px; left: 30px; top: 0; --rot: -2.2deg; transform: rotate(-2.2deg); }
-  .pool { width: 250px; height: 330px; left: 470px; top: 0; --rot: 1.6deg; transform: rotate(1.6deg); }
-  .ghost { position: absolute; width: 250px; height: 330px; background: #FDFDFB; box-shadow: 0 2px 4px rgba(25,25,20,.10), 0 18px 30px rgba(25,25,20,.12); pointer-events: none; }
-  .g1 { left: 482px; top: -8px; transform: rotate(4.5deg); } .g2 { left: 458px; top: 6px; transform: rotate(-1.4deg); }
-  .count { position: absolute; right: 18px; top: 16px; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.04em; color: #191914; opacity: 0; transition: opacity 220ms ease; }
-  .paper.has .count { opacity: 1; }
-  .arrow { position: absolute; left: 50%; top: 150px; transform: translateX(-50%); font-size: 11px; letter-spacing: 0.18em; color: #8A8A80; }
+  /* ---------- copy ---------- */
+  .copy { position: absolute; left: 82px; top: 96px; width: 330px; z-index: 40; }
+  h1 { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 900; font-size: 40px; letter-spacing: -0.045em; line-height: 0.98; margin: 0; }
+  h1 .hl { position: relative; white-space: nowrap; }
+  h1 .hl svg { position: absolute; left: -4px; right: -4px; top: 14%; height: 78%; width: calc(100% + 8px); z-index: -1; }
+  h1 .hl svg path { fill: #D8FF3E; mix-blend-mode: multiply; transform-origin: left; transform: scaleX(0); animation: swipe 520ms cubic-bezier(.4,0,.2,1) 700ms forwards; }
+  @keyframes swipe { to { transform: scaleX(1) } }
+  .sub { margin-top: 16px; font-size: 12.5px; line-height: 1.5; color: #55554E; max-width: 300px; }
+  .sub b { font-weight: 500; color: #191914; }
 
-  .actions { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-  .run { padding: 11px 26px; border: 1px solid #191914; background: #191914; color: #FDFDFB; font: inherit; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; transition: opacity 200ms ease, transform 200ms ease; }
-  .run[disabled] { opacity: .28; cursor: default; }
-  .run:not([disabled]):hover { transform: translateY(-1px); }
-  .hint { font-size: 11px; letter-spacing: 0.04em; color: #8A8A80; }
-  .hint b { font-weight: 500; color: #191914; }
+  /* ---------- desk ---------- */
+  .stage { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 50% 40%; }
+  .plane { position: absolute; left: 0; top: 0; width: 1680px; height: 1000px; transform-origin: 50% 50%; transform-style: preserve-3d; will-change: transform; }
+  .sheet { position: absolute; width: 190px; height: 260px; background: #FDFDFB; transform-style: preserve-3d;
+    box-shadow: 0 1px 2px rgba(25,25,20,.10), 0 22px 36px -12px rgba(25,25,20,.28); }
+  .sheet::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(255,255,255,.35), rgba(0,0,0,0) 40%, rgba(25,25,20,.025)); pointer-events: none; }
+  .rule { position: absolute; left: 14px; height: 1.6px; background: rgba(25,25,20,.14); }
+  .mark { position: absolute; height: 7.5px; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; opacity: 0; transition: opacity 240ms ease; }
+  .on .mark { opacity: 1; }
+
+  /* JD paper */
+  .jd { left: 640px; top: 400px; width: 205px; height: 280px; transform: rotate(-2.4deg); cursor: pointer; transition: transform 380ms cubic-bezier(.2,.7,.2,1), box-shadow 380ms ease; }
+  .jd:hover, .jd.over { transform: rotate(-2.4deg) translateZ(18px); box-shadow: 0 2px 4px rgba(25,25,20,.12), 0 40px 60px -14px rgba(25,25,20,.34); }
+  .lab { position: absolute; left: 18px; top: 16px; font-size: 9px; letter-spacing: 0.12em; font-weight: 500; color: #8A8A80; }
+  .ttl { position: absolute; left: 18px; top: 38px; right: 18px; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 900; font-size: 17px; line-height: 1.05; letter-spacing: -0.04em; }
+  .foot { position: absolute; left: 18px; right: 18px; bottom: 16px; font-size: 8.5px; letter-spacing: 0.1em; color: #8A8A80; text-transform: uppercase; }
+  .on .foot { color: #191914; }
+
+  /* pile */
+  .pile { position: absolute; left: 1000px; top: 370px; width: 190px; height: 260px; transform-style: preserve-3d; }
+  .pile .sheet { left: 0; top: 0; transition: transform 520ms cubic-bezier(.2,.7,.2,1), opacity 400ms ease; }
+  .pile .sheet.top { cursor: pointer; }
+  .pile.over .sheet.top, .pile .sheet.top:hover { transform: translateZ(18px) rotate(1.4deg) !important; }
+  .pile .sheet .name { position: absolute; left: 14px; top: 44px; right: 14px; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 12px; letter-spacing: -0.03em; line-height: 1; color: #191914; }
+  .pile .sheet .role { position: absolute; left: 14px; top: 60px; right: 14px; font-size: 7px; letter-spacing: 0.02em; color: #8A8A80; }
+  .count { position: absolute; right: 14px; top: 12px; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.04em; line-height: 1; color: #191914; opacity: 0; transition: opacity 240ms ease; }
+  .pile.on .count { opacity: 1; }
+
+  /* hand-drawn ring on drag-over */
+  .ring { position: absolute; inset: -14px; pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
+  .over > .ring { opacity: 1; }
+  .ring path { fill: none; stroke: #D8FF3E; stroke-width: 3.5; stroke-linecap: round; mix-blend-mode: multiply; }
+
+  /* scan */
+  .scan { position: absolute; top: -20%; bottom: -20%; width: 160px; left: -260px; pointer-events: none; opacity: 0;
+    background: linear-gradient(90deg, rgba(216,255,62,0) 0%, rgba(216,255,62,.9) 50%, rgba(216,255,62,0) 100%); filter: blur(7px); mix-blend-mode: multiply; z-index: 50; }
+  .reading .scan { opacity: 1; animation: sweep 1800ms cubic-bezier(.4,0,.3,1) forwards; }
+  @keyframes sweep { from { left: -260px } to { left: 105% } }
+
+  /* action row (mirrors the table's bottom bar) */
+  .bar { position: absolute; left: 26px; bottom: 26px; z-index: 60; display: flex; align-items: center; gap: 18px; }
+  .run { padding: 8px 16px; border: 1px solid rgba(25,25,20,.35); background: none; color: #8A8A80; font: inherit; font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; cursor: default; transition: all 220ms ease; }
+  .run.ready { border-color: #191914; background: #191914; color: #FDFDFB; cursor: pointer; }
+  .run.ready:hover { box-shadow: 0 6px 16px -6px rgba(25,25,20,.5); transform: translateY(-1px); }
+  .hint { font-size: 11px; letter-spacing: 0.02em; color: #8A8A80; }
   .hint a { color: #2B4FD8; text-decoration: none; cursor: pointer; }
   .hint a:hover { color: #191914; }
-  .foot { position: absolute; left: 26px; bottom: 24px; font-size: 10.5px; letter-spacing: 0.06em; color: #8A8A80; }
-  .err { position: absolute; left: 50%; bottom: 128px; transform: translateX(-50%); font-size: 11.5px; color: #E23B2E; }
+  .meta { position: absolute; right: 26px; bottom: 28px; font-size: 10px; letter-spacing: 0.08em; color: #8A8A80; z-index: 60; }
+  .err { position: absolute; left: 26px; bottom: 66px; font-size: 11px; color: #E23B2E; z-index: 60; }
 
-  /* reading state */
-  .scan { position: absolute; top: -20%; bottom: -20%; width: 140px; left: -200px; pointer-events: none; opacity: 0;
-    background: linear-gradient(90deg, rgba(216,255,62,0) 0%, rgba(216,255,62,.85) 50%, rgba(216,255,62,0) 100%); filter: blur(6px); mix-blend-mode: multiply; }
-  .root.reading .scan { opacity: 1; animation: sweep 1500ms cubic-bezier(.4,0,.3,1) forwards; }
-  @keyframes sweep { from { left: -200px } to { left: 110% } }
-  .root.reading .paper { pointer-events: none; }
-  .root.leaving .stage, .root.leaving .hero, .root.leaving .actions { transition: opacity 420ms ease, transform 420ms cubic-bezier(.4,0,.3,1); opacity: 0; transform: translateX(-50%) translateY(-20px); }
-  .root.leaving .actions { transform: translateY(-20px); }
-  @media (prefers-reduced-motion: reduce) { .paper, .root.leaving .stage, .root.leaving .hero { transition: none !important; } .root.reading .scan { animation: none; } }
-  @media (max-width: 820px) { .stage { width: 100%; height: 420px; top: 300px; } .jd { left: calc(50% - 125px); top: 0; height: 190px; } .pool { left: calc(50% - 125px); top: 214px; height: 190px; } .ghost { display: none; } .arrow { display: none; } .paper .ttl { font-size: 16px; } }
+  /* entrance */
+  .jd, .pile, .copy, .bar { opacity: 0; transform-origin: center; animation: enter 700ms cubic-bezier(.2,.7,.2,1) forwards; }
+  .copy { animation-delay: 80ms; } .jd { animation-delay: 260ms; } .pile { animation-delay: 380ms; } .bar { animation-delay: 620ms; }
+  @keyframes enter { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: none } }
+  .jd { animation-name: enterJd; } @keyframes enterJd { from { opacity: 0; transform: rotate(-2.4deg) translateY(22px) translateZ(40px) } to { opacity: 1; transform: rotate(-2.4deg) } }
+
+  /* leave */
+  .leaving .copy, .leaving .bar, .leaving .meta { transition: opacity 360ms ease; opacity: 0; }
+  .leaving .jd { transition: transform 520ms cubic-bezier(.4,0,.3,1); transform: rotate(-2.4deg) translateY(-90px) translateX(-130px); }
+  .leaving .pile .sheet { transition: transform 620ms cubic-bezier(.4,0,.3,1), opacity 500ms ease; opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } .jd, .pile, .copy, .bar { opacity: 1; } }
+  @media (max-width: 900px) { .copy { left: 26px; top: 72px; width: calc(100% - 52px); } h1 { font-size: 32px; } .plane { transform: none !important; width: 100%; height: 100%; } .jd { left: 26px; top: 300px; } .pile { left: auto; right: 26px; top: 300px; } }
 </style>
 </head>
 <body>
-<div class="root" id="root" style="--hl: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'%3E%3Cpath d='M 1.2 2.1 L 98.4 1.4 L 98.9 9.8 L 0.8 10.6 Z' fill='%23D8FF3E'/%3E%3C/svg%3E&quot;)">
+<div class="root" id="root">
   <div class="wordmark">CALIPER</div>
   <div class="tele" id="tele">no data leaves this machine</div>
   <div class="scan"></div>
 
-  <div class="hero">
-    <h1>Every rank comes back<br>with a <span class="hl">receipt.</span></h1>
-    <div class="sub">Drop a brief and a pool of resumes. Caliper reads both channels, keyword and meaning, and shows the line behind every point.</div>
+  <div class="copy">
+    <h1>Every rank comes back with a <span class="hl">receipt.<svg viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M 1.4 2.2 L 98.1 1.1 L 99.2 9.6 L 0.6 10.8 Z"/></svg></span></h1>
+    <div class="sub">Drop the brief on the left and the pool on the right. Caliper reads both channels, <b>keyword</b> and <b>meaning</b>, and shows the line behind every point.</div>
   </div>
 
-  <div class="stage">
-    <div class="paper jd" id="jdPaper">
+  <div class="stage"><div class="plane" id="plane">
+    <div class="sheet jd" id="jd">
       <div class="lab">JOB DESCRIPTION</div>
       <div class="ttl" id="jdTitle">Drop the brief</div>
-      <div class="rule" style="top:118px;width:150px"></div><div class="rule" style="top:136px;width:190px"></div><div class="rule" style="top:154px;width:120px"></div><div class="rule" style="top:172px;width:170px"></div><div class="rule" style="top:190px;width:90px"></div><div class="rule" style="top:208px;width:160px"></div>
-      <div class="mark" style="left:20px;top:134px;width:110px"></div><div class="mark" style="left:20px;top:188px;width:70px"></div>
-      <div class="drop" id="jdDrop">PDF or text · click to choose</div>
+      <div class="rule" style="top:96px;width:120px"></div><div class="rule" style="top:112px;width:160px"></div><div class="rule" style="top:128px;width:100px"></div><div class="rule" style="top:144px;width:150px"></div><div class="rule" style="top:160px;width:80px"></div><div class="rule" style="top:176px;width:140px"></div><div class="rule" style="top:192px;width:110px"></div><div class="rule" style="top:208px;width:130px"></div>
+      <div class="mark" id="jm1" style="left:16px;top:110px;width:96px"></div><div class="mark" id="jm2" style="left:16px;top:158px;width:60px"></div><div class="mark" id="jm3" style="left:16px;top:206px;width:84px"></div>
+      <div class="foot" id="jdFoot">pdf · docx · text</div>
+      <svg class="ring" viewBox="0 0 100 100" preserveAspectRatio="none"><path id="ring1"/></svg>
       <input type="file" id="jdInput" accept=".pdf,.txt,.docx" hidden>
     </div>
-    <div class="arrow">→</div>
-    <div class="ghost g1"></div><div class="ghost g2"></div>
-    <div class="paper pool" id="poolPaper">
-      <div class="lab">RESUMES</div>
-      <div class="count" id="count">0</div>
-      <div class="ttl" id="poolTitle">Drop the pool</div>
-      <div class="rule" style="top:118px;width:170px"></div><div class="rule" style="top:136px;width:130px"></div><div class="rule" style="top:154px;width:190px"></div><div class="rule" style="top:172px;width:110px"></div><div class="rule" style="top:190px;width:160px"></div><div class="rule" style="top:208px;width:140px"></div>
-      <div class="mark" style="left:20px;top:116px;width:90px"></div><div class="mark" style="left:20px;top:152px;width:120px"></div><div class="mark" style="left:20px;top:206px;width:60px"></div>
-      <div class="drop" id="poolDrop">PDF · DOCX · XML · TXT · any number</div>
+
+    <div class="pile" id="pile">
+      <svg class="ring" viewBox="0 0 100 100" preserveAspectRatio="none"><path id="ring2"/></svg>
       <input type="file" id="poolInput" accept=".pdf,.txt,.docx,.xml" multiple hidden>
     </div>
-  </div>
+  </div></div>
 
   <div class="err" id="err"></div>
-  <div class="actions">
-    <button class="run" id="run" disabled>Read the pool</button>
-    <div class="hint" id="hint">or <a id="sample">run the sample pool</a> · <b>18 resumes</b> against the TechNova brief</div>
+  <div class="bar">
+    <button class="run" id="run">Read the pool</button>
+    <div class="hint" id="hint">or <a id="sample">run the sample pool</a> · 18 resumes against the TechNova brief · enter</div>
   </div>
-  <div class="foot">hand-written BM25 · MiniLM 384-d · local</div>
+  <div class="meta">HAND-WRITTEN BM25 · MINILM 384-D · LOCAL</div>
 </div>
 
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  const root = $('root'), tele = $('tele'), err = $('err');
-  const jdPaper = $('jdPaper'), poolPaper = $('poolPaper'), jdInput = $('jdInput'), poolInput = $('poolInput'), run = $('run');
-  let jdFile = null, pool = [];
+  const root = $('root'), tele = $('tele'), err = $('err'), plane = $('plane'), pile = $('pile'), jd = $('jd'), run = $('run');
+  const jdInput = $('jdInput'), poolInput = $('poolInput');
+  let jdFile = null, pool = [], busy = false;
+
+  // ---- hand-drawn helpers (same construction as the table) ----
+  function rng(seed) { let t = seed >>> 0; return function () { t += 0x6D2B79F5; let x = t; x = Math.imul(x ^ (x >>> 15), 1 | x); x ^= x + Math.imul(x ^ (x >>> 7), 61 | x); return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+  function hlBg(seed) { const r = rng(seed), j = () => r() * 2.4 - 1.2; const d = 'M ' + (1 + j()) + ' ' + (2 + j()) + ' L ' + (98 + j()) + ' ' + (1 + j()) + ' L ' + (99 + j()) + ' ' + (10 + j()) + ' L ' + (1 + j()) + ' ' + (11 + j()) + ' Z';
+    return 'url("data:image/svg+xml,' + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'><path d='" + d + "' fill='#D8FF3E'/></svg>") + '")'; }
+  function ringPath(seed) { const r = rng(seed), j = () => r() * 2.4 - 1.2; const cx = 50, cy = 50, rx = 48, ry = 48; let d = ''; for (let i = 0; i <= 30; i++) { const a = -0.5 + (i / 30) * Math.PI * 2.12; const x = (cx + Math.cos(a) * (rx + j())).toFixed(1), y = (cy + Math.sin(a) * (ry + j() * 0.5)).toFixed(1); d += (i ? ' L ' : 'M ') + x + ' ' + y; } return d; }
+  $('ring1').setAttribute('d', ringPath(7)); $('ring2').setAttribute('d', ringPath(19));
+  ['jm1', 'jm2', 'jm3'].forEach((id, k) => { $(id).style.backgroundImage = hlBg(40 + k); });
+
+  // ---- desk tilt + cursor parallax ----
+  const TILT = 14; let mx = 0.5, my = 0.5, cx = 0.5, cy = 0.5;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function layout() {
+    const w = root.clientWidth, h = root.clientHeight;
+    const s = Math.max(0.42, Math.min(w / 1680, h / 1000)) * 1.12;
+    plane.style.left = ((w - 1680) / 2) + 'px'; plane.style.top = ((h - 1000) / 2) + 'px';
+    plane.dataset.s = s;
+  }
+  function frame() {
+    cx += (mx - cx) * 0.06; cy += (my - cy) * 0.06;
+    const s = parseFloat(plane.dataset.s || 1);
+    const rx = TILT + (cy - 0.5) * -3, ry = (cx - 0.5) * 4;
+    plane.style.transform = 'scale(' + s.toFixed(4) + ') rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    if (!reduced) requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize', layout); layout(); frame();
+  window.addEventListener('pointermove', (e) => { mx = e.clientX / root.clientWidth; my = e.clientY / root.clientHeight; }, { passive: true });
+
+  // ---- pile rendering ----
   const isJd = (f) => /jd|brief|job|description/i.test(f.name);
   const isDoc = (f) => /\.(pdf|txt|docx|xml)$/i.test(f.name);
+  const nice = (f) => f.name.replace(/\.[^.]+$/, '').replace(/^Resume[_ ]?\d+[_ ]?/i, '').replace(/[_-]+/g, ' ').trim();
+
+  function renderPile() {
+    pile.querySelectorAll('.sheet').forEach((n) => n.remove());
+    const n = pool.length ? Math.min(pool.length, 9) : 6;
+    const r = rng(311);
+    for (let i = 0; i < n; i++) {
+      const el = document.createElement('div');
+      el.className = 'sheet' + (i === n - 1 ? ' top' : '');
+      const rot = (r() * 9 - 4.5).toFixed(2), dx = (r() * 14 - 7).toFixed(1), dy = (r() * 12 - 6).toFixed(1);
+      el.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + rot + 'deg) translateZ(' + (i * 1.5) + 'px)';
+      el.style.zIndex = i + 1;
+      const f = pool.length ? pool[pool.length - n + i] : null;
+      let inner = '';
+      if (i === n - 1) {
+        inner = '<div class="lab">RESUMES</div><div class="count" id="count">' + pool.length + '</div>' +
+          '<div class="foot" id="poolFoot">' + (pool.length ? pool.length + ' resume' + (pool.length === 1 ? '' : 's') + ' · ready' : 'drop the pool · any format') + '</div>';
+        inner += f ? '<div class="name">' + nice(f) + '</div><div class="role">' + f.name + '</div>' : '<div class="ttl">Drop the pool</div>';
+      } else if (f) {
+        inner = '<div class="name">' + nice(f) + '</div><div class="role">' + f.name + '</div>';
+      }
+      const rr = rng(500 + i);
+      for (let k = 0; k < 8; k++) inner += '<div class="rule" style="top:' + (86 + k * 16) + 'px;width:' + Math.round(70 + rr() * 90) + 'px"></div>';
+      if (pool.length) for (let k = 0; k < 2; k++) { const y = 86 + Math.floor(rr() * 8) * 16 - 2; inner += '<div class="mark" style="left:14px;top:' + y + 'px;width:' + Math.round(40 + rr() * 60) + 'px;background-image:' + hlBg(900 + i * 7 + k) + '"></div>'; }
+      el.innerHTML = inner;
+      pile.insertBefore(el, pile.firstChild);
+    }
+    pile.classList.toggle('on', pool.length > 0);
+    const top = pile.querySelector('.sheet.top');
+    top.addEventListener('click', () => poolInput.click());
+  }
 
   function refresh() {
-    jdPaper.classList.toggle('has', !!jdFile);
-    $('jdTitle').textContent = jdFile ? jdFile.name.replace(/\.[^.]+$/, '') : 'Drop the brief';
-    $('jdDrop').textContent = jdFile ? 'brief ready' : 'PDF or text · click to choose';
-    poolPaper.classList.toggle('has', pool.length > 0);
-    $('count').textContent = pool.length;
-    $('poolTitle').textContent = pool.length ? pool.length + ' resume' + (pool.length === 1 ? '' : 's') : 'Drop the pool';
-    $('poolDrop').textContent = pool.length ? pool.slice(0, 2).map((f) => f.name.replace(/\.[^.]+$/, '')).join(' · ') + (pool.length > 2 ? ' · …' : '') : 'PDF · DOCX · XML · TXT · any number';
-    run.disabled = !(pool.length > 0);
-    run.textContent = pool.length ? 'Read ' + pool.length + ' resume' + (pool.length === 1 ? '' : 's') + (jdFile ? ' against the brief' : ' against the sample brief') : 'Read the pool';
+    jd.classList.toggle('on', !!jdFile);
+    $('jdTitle').textContent = jdFile ? nice(jdFile) : 'Drop the brief';
+    $('jdFoot').textContent = jdFile ? 'brief ready' : 'pdf · docx · text';
+    renderPile();
+    const ready = pool.length > 0;
+    run.classList.toggle('ready', ready);
+    run.textContent = ready ? 'Read ' + pool.length + ' resume' + (pool.length === 1 ? '' : 's') + (jdFile ? ' against the brief' : ' against the sample brief') : 'Read the pool';
+    tele.textContent = ready ? pool.length + ' documents  ·  ' + (jdFile ? '1 job description' : 'sample job description') + '  ·  local' : 'no data leaves this machine';
     err.textContent = '';
   }
 
@@ -125,38 +209,38 @@
     const arr = [...files].filter(isDoc);
     if (!arr.length) return;
     if (target === 'jd') { jdFile = arr[0]; refresh(); return; }
-    const jd = arr.find(isJd);
-    if (jd && !jdFile) jdFile = jd;
-    pool = pool.concat(arr.filter((f) => f !== jd));
+    const j = arr.find(isJd);
+    if (j && !jdFile) jdFile = j;
+    pool = pool.concat(arr.filter((f) => f !== j));
     refresh();
   }
 
-  jdPaper.addEventListener('click', () => jdInput.click());
-  poolPaper.addEventListener('click', () => poolInput.click());
+  jd.addEventListener('click', () => jdInput.click());
   jdInput.addEventListener('change', (e) => take(e.target.files, 'jd'));
   poolInput.addEventListener('change', (e) => take(e.target.files, 'pool'));
-  [[jdPaper, 'jd'], [poolPaper, 'pool']].forEach(([el, t]) => {
+  [[jd, 'jd'], [pile, 'pool']].forEach(([el, t]) => {
     el.addEventListener('dragover', (e) => { e.preventDefault(); el.classList.add('over'); });
-    el.addEventListener('dragleave', () => el.classList.remove('over'));
-    el.addEventListener('drop', (e) => { e.preventDefault(); el.classList.remove('over'); take(e.dataTransfer.files, t); });
+    el.addEventListener('dragleave', (e) => { if (!el.contains(e.relatedTarget)) el.classList.remove('over'); });
+    el.addEventListener('drop', (e) => { e.preventDefault(); e.stopPropagation(); el.classList.remove('over'); take(e.dataTransfer.files, t); });
   });
   document.body.addEventListener('dragover', (e) => e.preventDefault());
-  document.body.addEventListener('drop', (e) => { if (!e.target.closest('.paper')) { e.preventDefault(); take(e.dataTransfer.files, 'pool'); } });
+  document.body.addEventListener('drop', (e) => { e.preventDefault(); take(e.dataTransfer.files, 'pool'); });
 
   function go(promise, label) {
+    if (busy) return; busy = true;
     root.classList.add('reading');
-    tele.textContent = label;
     const t0 = performance.now();
-    const tick = setInterval(() => { tele.textContent = label + '  ·  ' + ((performance.now() - t0) / 1000).toFixed(1) + 's'; }, 100);
-    Promise.all([promise, new Promise((r) => setTimeout(r, 1500))]).then(([g]) => {
+    const tick = setInterval(() => { tele.textContent = label + '  ·  ' + ((performance.now() - t0) / 1000).toFixed(1) + 's  ·  local'; }, 90);
+    ['jm1', 'jm2', 'jm3'].forEach((id, k) => setTimeout(() => { $(id).style.opacity = 1; }, 500 + k * 220));
+    Promise.all([promise, new Promise((r) => setTimeout(r, 1900))]).then(([g]) => {
       clearInterval(tick);
       const log = g.log || [];
       const chunks = (log.find((l) => /^Evidence/.test(l.step)) || {}).chunks || 0;
       tele.textContent = g.candidates.length + ' documents  ·  ' + chunks + ' evidence chunks  ·  local';
       root.classList.add('leaving');
-      setTimeout(() => { location.href = './index.html?loaded=1'; }, 460);
-    }).catch((e) => {
-      clearInterval(tick);
+      setTimeout(() => { location.href = './index.html?loaded=1'; }, 560);
+    }).catch(() => {
+      clearInterval(tick); busy = false;
       root.classList.remove('reading');
       tele.textContent = 'no data leaves this machine';
       err.textContent = 'The engine is not answering. Start it on 127.0.0.1:8000 and try again.';
@@ -164,14 +248,16 @@
   }
 
   run.addEventListener('click', () => {
-    if (run.disabled) return;
+    if (!pool.length) return;
     const fd = new FormData();
     if (jdFile) fd.append('jd', jdFile);
     pool.forEach((f) => fd.append('resumes', f));
     go(fetch('/api/upload', { method: 'POST', body: fd }).then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json(); }), 'reading ' + pool.length + ' documents');
   });
   $('sample').addEventListener('click', () => go(fetch('/api/run', { method: 'POST' }).then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json(); }), 'reading the sample pool'));
-  window.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !root.classList.contains('reading')) { if (pool.length) run.click(); else $('sample').click(); } });
+  window.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !busy) { if (pool.length) run.click(); else $('sample').click(); } });
+
+  refresh();
 })();
 </script>
 </body>
