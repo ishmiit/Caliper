@@ -7,6 +7,9 @@ export default function Redline({ graph, flags, setFlags, onApply, selected, set
   const [doc, setDoc] = useState(null)
   const [accepted, setAccepted] = useState({})
   const [busy, setBusy] = useState(null)
+  const [blind, setBlind] = useState(null)
+  const [blindBusy, setBlindBusy] = useState(false)
+  const runBlind = async () => { setBlindBusy(true); try { setBlind(await api.blind()) } finally { setBlindBusy(false) } }
 
   useEffect(() => {
     if (flags) return
@@ -75,6 +78,15 @@ export default function Redline({ graph, flags, setFlags, onApply, selected, set
           {!flags && <div className="px-4 py-4 text-[12.5px] text-n2">Reading the brief against the pool.</div>}
           {flags && flags.length === 0 && <div className="px-4 py-4 text-[12.5px] text-n6">Nothing in this brief narrows the pool.</div>}
           <div className="px-4 py-4 space-y-5">
+            <div className="pl-3 border-l-2" style={{ borderColor: blind ? (blind.delta_score >= 1.0 ? 'var(--azurite)' : 'var(--missing)') : 'var(--missing)' }}>
+              <div className="text-[12.5px] font-medium">Blind re-rank</div>
+              <div className="text-[12.5px] text-ink mt-1 leading-[1.5]">
+                {blind ? (blind.delta_score < 1.0 ? `Names, emails, colleges and pronouns removed: scores move ${blind.delta_score} points on average, ranks ${blind.delta_blind}. Identity is not driving the ranking; rank swaps are between near-ties.` : `Names, emails, colleges and pronouns removed: scores move ${blind.delta_score} points on average, ranks ${blind.delta_blind}. Review the candidates that moved.`) : 'Strip names, emails, colleges and pronouns, then re-rank. Measures whether identity signals move anyone.'}
+              </div>
+              <div className="text-[11.5px] text-n6 mt-1.5 num">
+                {blind ? (blind.ranks.filter((r) => Math.abs(r.score - r.score_blind) >= 1.0).slice(0, 6).map((r) => `${r.name.split(' ')[0]} ${r.score.toFixed(1)}→${r.score_blind.toFixed(1)}`).join(' · ') || 'no candidate moved by a full point') : <button onClick={runBlind} disabled={blindBusy} className="text-ink underline decoration-n3 underline-offset-2 hover:decoration-ink">{blindBusy ? 'running' : 'run'}</button>}
+              </div>
+            </div>
             {sorted.map((f) => {
               const measurable = impact(f) > 0
               const done = accepted[f.id] !== undefined

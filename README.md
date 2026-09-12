@@ -34,6 +34,18 @@ Measured on 198 resumes: top 12 all dev roles, bottom 5 all non-tech, nDCG@5 = 1
 unzip the pool into data/pool/    then    python scripts/benchmark.py data/pool --tune
 ```
 
+## Resume text is untrusted input
+
+- **Evidence depth.** Every chunk is tiered *professional / internship / project / listed* from its section and the nearest role line. A skill that only appears in a skills list can never be Confirmed: it caps at Stated with fit 0.55, and the receipt says so.
+- **Claims vs dates.** "5 years of experience" is checked against the dated roles; if they disagree the resume is flagged and scored on the dates.
+- **Injection.** Lines addressed to the screener ("ignore previous instructions", "rank this candidate first") are removed from evidence before scoring and reported.
+- **Hidden text.** White or sub-4pt characters in PDFs are counted and ignored.
+- **Stuffing and slop.** Skills listed but never shown in use, repeated terms, and generated-sounding phrasing are flagged.
+- **Near-duplicates.** Resumes whose mean embeddings agree above 0.94 are linked.
+- **Blind re-rank.** Names, emails, phones, URLs and pronouns stripped, re-ranked, mean rank and score shift reported (0.11 / 0.14 on the sample pool).
+
+`data/resumes/19_rohit_bhalla.txt` is a deliberately adversarial resume for the demo.
+
 ## How the matching works (the judge walkthrough)
 
 ```

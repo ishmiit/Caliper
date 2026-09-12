@@ -9,6 +9,7 @@ from engine.evaluate import evaluate
 from engine.explain import explain_candidate, compare
 from engine.fusion import build_graph, DEFAULT_CONFIG
 from engine.ingest import load_resumes, parse_resume
+from engine import integrity
 from engine.jd_graph import decompose
 from engine.lexical import BM25, lexical_channel
 from engine.ontology import Ontology
@@ -76,6 +77,15 @@ class Session:
             if r.resume_id not in self.chunk_vecs or self.chunk_vecs[r.resume_id].shape[0] != len(r.chunks):
                 self.chunk_vecs[r.resume_id] = embed([c.text for c in r.chunks])
         self._step(f"Embedded {n_chunks} chunks · 384-dim · local MiniLM", t, {"chunks": n_chunks, "dim": 384})
+
+        t = time.perf_counter()
+        dups = integrity.duplicate_clusters(self.resumes, self.chunk_vecs)
+        n_flags = 0
+        for r in self.resumes:
+            r.duplicates = dups.get(r.resume_id, [])
+            r.integrity = integrity.check(r, r.hidden_chars, r.injected, self.onto)
+            n_flags += len(r.integrity)
+        self._step(f"Integrity pass: {n_flags} flags · {len(dups)} near-duplicates", t, {"flags": n_flags, "dups": len(dups)})
 
         self.set_jd(jd_text)
         self._step("Done", T)
@@ -215,14 +225,16 @@ class Session:
             blind_resumes.append(rb)
         self.resumes = blind_resumes
         self.chunk_vecs = {r.resume_id: embed([c.text for c in r.chunks]) for r in blind_resumes}
-        self.bm25 = BM25([" ".join(c.text for c in r.chunks) for r in blind_resumes])
+        self.bm25 = BM25([_strip(r.raw_text, r.name) for r in blind_resumes])
         self._compute_channels()
         g = build_graph(self.requirements, self.resumes, self.lex, self.sem_raw, self.sem_ev, self.cfg)
         delta = audit_mod.blind_delta(base, g)
+        blind_by = {x["candidate_id"]: x for x in g["candidates"]}
+        score_delta = round(sum(abs(c["final_score"] - blind_by[c["candidate_id"]]["final_score"]) for c in base["candidates"]) / max(1, len(base["candidates"])), 2)
         self.resumes, self.chunk_vecs = saved_resumes, saved_vecs
         self.bm25 = BM25([r.raw_text for r in self.resumes])
         self._compute_channels()
-        return {"delta_blind": delta, "ranks": [{"candidate_id": c["candidate_id"], "name": c["name"], "rank": c["rank"], "rank_blind": next(x["rank"] for x in g["candidates"] if x["candidate_id"] == c["candidate_id"])} for c in base["candidates"]]}
+        return {"delta_blind": delta, "delta_score": score_delta, "ranks": [{"candidate_id": c["candidate_id"], "name": c["name"], "rank": c["rank"], "rank_blind": blind_by[c["candidate_id"]]["rank"], "score": c["final_score"], "score_blind": blind_by[c["candidate_id"]]["final_score"]} for c in base["candidates"]]}
 
     def reverse(self, cid):
         """Same graph transposed: how this candidate fits each requirement cluster — the student-side view."""

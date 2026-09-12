@@ -3,13 +3,14 @@ import { useEffect, useMemo, useState } from 'react'
 function shape(log, graph) {
   if (!log) return []
   const by = (needle) => log.find((l) => l.step.toLowerCase().startsWith(needle))
-  const parsed = by('parsed'), headers = by('section'), chunks = by('evidence'), emb = by('embedded'), jd = by('jd'), scored = by('scored')
+  const parsed = by('parsed'), headers = by('section'), chunks = by('evidence'), emb = by('embedded'), jd = by('jd'), scored = by('scored'), integ = by('integrity')
   const spread = graph ? (graph.candidates[0].final_score - graph.candidates.at(-1).final_score).toFixed(0) : null
   const rows = [
     ['parsing documents', parsed ? `${parsed.count} / ${parsed.count}` : null],
     ['section headers recovered', headers ? `${headers.headers}` : null],
     ['evidence chunks extracted', chunks ? `${chunks.chunks}` : null],
     ['embedding · local · 384d', emb ? (emb.ms < 30 ? 'cached' : `${(emb.ms / 1000).toFixed(2)}s`) : null],
+    ['integrity pass', integ ? `${integ.flags} flags · ${integ.dups} duplicates` : null],
     ['requirements decomposed', jd ? `${jd.n_req}` : null],
     ['scoring pairs', scored ? `${scored.pairs}` : null],
     ['calibrating against cohort', spread ? `spread ${spread}` : null],

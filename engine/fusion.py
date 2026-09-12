@@ -35,8 +35,13 @@ def calibrate(raw_row, on=True):
     return [float(np.clip(0.6 * p + 0.4 * sigmoid(zz), 0, 1)) for p, zz in zip(pct, z)]
 
 
-def fuse_pair(req, L, S, cfg, months=0):
+LISTED_CAP = 0.55
+
+
+def fuse_pair(req, L, S, cfg, months=0, listed_only=False):
     tl, ts, alpha = cfg["tau_lex"], cfg["tau_sem"], cfg["alpha_inferred"]
+    if listed_only and req.type in ("hard_skill", "responsibility", "soft_skill") and L >= tl:
+        return "STATED", min(0.9 * L, LISTED_CAP)
     if req.type == "experience_level" and getattr(req, "years", 0) > 0:
         ratio = min(1.0, months / (req.years * 12))
         if ratio >= 1.0:
@@ -88,7 +93,10 @@ def build_graph(requirements, resumes, lex, sem_raw, sem_evidence, cfg):
                 elif mode == "sem":
                     verdict, fit = ("CONFIRMED", s) if s >= cfg["tau_sem"] else ("MISSING", 0.5 * s)
                 else:
-                    verdict, fit = fuse_pair(req, l, s, cfg, resumes[ci].months_experience)
+                    lx_chunk = lex[ri][ci].get("chunk")
+                    sem_top = sem_evidence[ri][ci][0]["chunk"] if sem_evidence[ri][ci] else None
+                    listed_only = (lx_chunk is not None and getattr(lx_chunk, "depth", "") == "listed") and (sem_top is None or getattr(sem_top, "depth", "") == "listed" or sem_evidence[ri][ci][0]["cos"] < cfg["tau_sem"])
+                    verdict, fit = fuse_pair(req, l, s, cfg, resumes[ci].months_experience, listed_only)
                 if req.priority == "must_have":
                     must_n += 1
                     must_hit += 1 if fit >= 0.4 else 0
@@ -117,10 +125,10 @@ def build_graph(requirements, resumes, lex, sem_raw, sem_evidence, cfg):
             lx = lex[ri][ci]
             ev = []
             if lx.get("chunk") is not None and l > 0:
-                ev.append({"chunk_id": lx["chunk"].chunk_id, "line": lx["chunk"].line_no, "section": lx["chunk"].section, "method": lx["kind"], "text": lx["chunk"].text, "score": round(l, 3), "term": lx.get("term"), "matched": lx.get("matched"), "hops": lx.get("hops")})
+                ev.append({"chunk_id": lx["chunk"].chunk_id, "line": lx["chunk"].line_no, "section": lx["chunk"].section, "depth": lx["chunk"].depth, "demonstrated": lx["chunk"].demonstrated, "method": lx["kind"], "text": lx["chunk"].text, "score": round(l, 3), "term": lx.get("term"), "matched": lx.get("matched"), "hops": lx.get("hops")})
             for e in sem_evidence[ri][ci][:2]:
                 if e["cos"] > 0.25 and not any(x["chunk_id"] == e["chunk"].chunk_id for x in ev):
-                    ev.append({"chunk_id": e["chunk"].chunk_id, "line": e["chunk"].line_no, "section": e["chunk"].section, "method": "semantic", "text": e["chunk"].text, "score": round(e["cos"], 3)})
+                    ev.append({"chunk_id": e["chunk"].chunk_id, "line": e["chunk"].line_no, "section": e["chunk"].section, "depth": e["chunk"].depth, "demonstrated": e["chunk"].demonstrated, "method": "semantic", "text": e["chunk"].text, "score": round(e["cos"], 3)})
             per_req.append({
                 "req_id": req.req_id, "verdict": verdict, "fit": round(fit, 3), "lex": round(l, 3), "sem": round(s, 3),
                 "sem_raw": round(sem_raw[ri][ci], 3), "contribution": round(contribution, 2), "weight": weights[ri],
@@ -136,14 +144,32 @@ def build_graph(requirements, resumes, lex, sem_raw, sem_evidence, cfg):
             "coverage_must": round(cov, 2), "penalty": round(penalty, 3),
             "parse_confidence": res.parse_confidence, "parse_method": res.parse_method, "fuzzy_headers": res.fuzzy_headers,
             "months_experience": res.months_experience, "n_chunks": len(res.chunks),
+            "integrity": res.integrity, "duplicates": res.duplicates,
+            "depth": _depth_counts(per_req),
             "per_requirement": per_req,
         })
     candidates.sort(key=lambda c: c["rank"])
     return {"config": cfg, "requirements": [r.to_dict() for r in requirements], "candidates": candidates}
 
 
+def _depth_counts(per_req):
+    counts = {"professional": 0, "internship": 0, "project": 0, "listed": 0}
+    for p in per_req:
+        if p["verdict"] in ("CONFIRMED", "STATED", "INFERRED") and p["evidence"]:
+            d = p["evidence"][0].get("depth")
+            if d in counts:
+                counts[d] += 1
+    return counts
+
+
 def _note(req, verdict, lx, s, cfg, months=0):
     months_txt = f"{months} months" if months < 24 else f"{months // 12} years"
+    chunk = lx.get("chunk")
+    depth = getattr(chunk, "depth", None) if chunk is not None else None
+    if verdict == "STATED" and depth == "listed":
+        return f"Listed under a skills or education heading only; never shown in use. Credit reduced."
+    if verdict in ("CONFIRMED", "STATED") and depth == "listed" and lx.get("kind") in ("exact", "alias"):
+        return f"Named in a list ('{lx['matched']}'); no project or role shows it in use."
     if verdict == "CONFIRMED" and lx.get("kind") == "ontology":
         return f"'{lx['matched']}' implies {lx['term']} ({lx['hops']} hop{'s' if lx['hops'] != 1 else ''}); meaning also matches."
     if verdict == "CONFIRMED" and lx.get("kind") in ("exact", "alias"):

@@ -5,6 +5,7 @@ import Bar from '../ui/Bar'
 import Pool from '../ui/Pool'
 
 const V = (v) => (v === 'WEAK' ? 'missing' : v.toLowerCase())
+const DEPTH = { professional: 'professional experience', internship: 'internship', project: 'project', listed: 'listed only' }
 
 export default function Console({ graph, config, onToggle, selected, setSelected, prevRanks, onRedline, onReset }) {
   const cand = useMemo(() => graph.candidates.find((c) => c.candidate_id === selected) || graph.candidates[0], [graph, selected])
@@ -45,6 +46,18 @@ function Reading({ cand, rows, reqById, graph, setSelected }) {
           A keyword-only screen ranks this candidate #{cand.rank_keyword_only}. Caliper ranks them #{cand.rank}.
         </div>
       )}
+      <DepthLine d={cand.depth} />
+      {cand.integrity?.length > 0 && (
+        <div className="px-5 py-2.5 border-b hairline">
+          <div className="marker text-n2 mb-1.5">Integrity</div>
+          {cand.integrity.map((f, i) => (
+            <div key={i} className={`text-[12.5px] leading-[1.5] pl-3 mb-1 ${f.severity === 'high' ? 'border-l-2 border-ink text-ink' : 'border-l border-n3 text-n6'}`}>{f.text}</div>
+          ))}
+        </div>
+      )}
+      {cand.duplicates?.length > 0 && (
+        <div className="px-5 py-2.5 border-b hairline text-[12.5px] text-n6">Near-identical to {cand.duplicates.length} other resume{cand.duplicates.length > 1 ? 's' : ''} in this pool.</div>
+      )}
       <div className="flex-1 overflow-y-auto px-5 py-2" key={cand.candidate_id}>
         {ordered.map((p, i) => <Evidence key={p.req_id} p={p} r={reqById[p.req_id]} index={i} />)}
       </div>
@@ -53,10 +66,22 @@ function Reading({ cand, rows, reqById, graph, setSelected }) {
   )
 }
 
+function DepthLine({ d }) {
+  if (!d) return null
+  const parts = [['professional', d.professional, 'in professional roles'], ['internship', d.internship, 'in internships'], ['project', d.project, 'in projects'], ['listed', d.listed, 'listed only']].filter((x) => x[1] > 0)
+  if (!parts.length) return null
+  return (
+    <div className="px-5 py-2.5 border-b hairline text-[12.5px] text-n6 num">
+      Evidence depth: {parts.map((x, i) => <span key={x[0]}>{i > 0 && ' · '}<span className={x[0] === 'listed' ? 'text-n2' : 'text-ink'}>{x[1]} {x[2]}</span></span>)}
+    </div>
+  )
+}
+
 function Evidence({ p, r, index }) {
   const v = V(p.verdict)
   const ev = p.evidence[0]
-  const meta = [v, ev?.hops ? `${ev.hops} hop` : null, ev ? `line ${ev.line + 1}` : null, p.fit ? p.fit.toFixed(2) : null].filter(Boolean).join(' · ')
+  const depth = ev?.depth ? DEPTH[ev.depth] : null
+  const meta = [v, depth, ev?.hops ? `${ev.hops} hop` : null, ev ? `line ${ev.line + 1}` : null, p.fit ? p.fit.toFixed(2) : null].filter(Boolean).join(' · ')
   return (
     <div className="py-3 border-b hairline last:border-b-0">
       <div className="flex items-baseline gap-2">

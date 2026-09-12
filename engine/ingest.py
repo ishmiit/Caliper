@@ -19,7 +19,12 @@ DATE_RANGE = re.compile(
     re.I,
 )
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
-PHONE = re.compile(r"(\+?\d[\d\s\-()]{8,}\d)")
+PHONE = re.compile(r"\+?\(?\d[\d\s\-()]{7,14}\d")
+
+
+def _is_phone(m):
+    digits = re.sub(r"\D", "", m.group(0))
+    return 10 <= len(digits) <= 13 and not re.search(r"(?:19|20)\d{2}\s*[-–]\s*(?:19|20)?\d{2}", m.group(0))
 URL = re.compile(r"(https?://\S+|www\.\S+|linkedin\.com/\S+|github\.com/\S+)", re.I)
 BULLET = re.compile(r"^\s*[•\-\*▪◦●·»➢✓–—]\s*")
 
@@ -32,6 +37,8 @@ class Chunk:
     text: str
     line_no: int
     weight: float
+    depth: str = "listed"
+    demonstrated: bool = False
 
 
 @dataclass
@@ -49,6 +56,10 @@ class Resume:
     dates_found: int = 0
     months_experience: int = 0
     pii: dict = field(default_factory=dict)
+    hidden_chars: int = 0
+    injected: list = field(default_factory=list)
+    integrity: list = field(default_factory=list)
+    duplicates: list = field(default_factory=list)
 
 
 def extract_text(path: Path):
@@ -64,6 +75,7 @@ def extract_text(path: Path):
         import pdfplumber
         with pdfplumber.open(str(path)) as pdf:
             text = "\n".join((p.extract_text() or "") for p in pdf.pages)
+            HIDDEN[str(path)] = _hidden_chars(pdf)
         if len(text.strip()) > 200:
             return text, "pdfplumber"
     except Exception:
@@ -79,6 +91,29 @@ def extract_text(path: Path):
     if text.strip():
         return text, "pdfplumber"
     return "", "failed"
+
+
+HIDDEN = {}
+
+
+def _hidden_chars(pdf):
+    """Characters a human would not see: white/near-white fill or sub-4pt size."""
+    n = 0
+    for page in pdf.pages:
+        for ch in page.chars:
+            col = ch.get("non_stroking_color")
+            white = False
+            if isinstance(col, (list, tuple)) and col:
+                try:
+                    white = all(float(v) >= 0.93 for v in col)
+                except Exception:
+                    white = False
+            elif isinstance(col, (int, float)):
+                white = float(col) >= 0.93
+            if white or (ch.get("size") or 10) < 4:
+                if not (ch.get("text") or "").isspace():
+                    n += 1
+    return n
 
 
 def _docx_text(path: Path):
@@ -196,7 +231,7 @@ def _year(s, ref=None):
 def guess_name(lines):
     for line in lines[:6]:
         s = line.strip()
-        if not s or EMAIL.search(s) or PHONE.search(s) or URL.search(s):
+        if not s or EMAIL.search(s) or any(_is_phone(m) for m in PHONE.finditer(s)) or URL.search(s):
             continue
         if 1 < len(s.split()) <= 4 and len(s) < 40 and not any(ch.isdigit() for ch in s):
             return s.title() if s.isupper() else s
@@ -205,7 +240,7 @@ def guess_name(lines):
 
 def strip_pii(text: str, name: str):
     t = EMAIL.sub("[email]", text)
-    t = PHONE.sub("[phone]", t)
+    t = PHONE.sub(lambda m: "[phone]" if _is_phone(m) else m.group(0), t)
     t = URL.sub("[url]", t)
     if name and name != "Unknown Candidate":
         t = re.sub(re.escape(name), "[name]", t, flags=re.I)
@@ -260,6 +295,10 @@ def parse_resume(path: Path, resume_id: str) -> Resume:
 
     exp_text = "\n".join(c.text for c in r.chunks if c.section == "EXPERIENCE")
     r.dates_found, r.months_experience = normalize_dates(exp_text if exp_text.strip() else "")
+    from engine.integrity import assign_depth, strip_injections
+    r.hidden_chars = HIDDEN.pop(str(path), 0)
+    r.injected = strip_injections(r)
+    assign_depth(r)
     known = sum(1 for s in ("EXPERIENCE", "PROJECTS", "SKILLS", "EDUCATION") if s in r.sections)
     r.parse_confidence = round(min(1.0, 0.45 + 0.12 * known + (0.07 if method != "failed" else -0.4) + min(0.1, len(r.chunks) / 200)), 2)
     r.pii = {"name": name, "emails": EMAIL.findall(raw)[:1], "blind_text": strip_pii(raw, name)}

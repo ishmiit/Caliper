@@ -66,7 +66,7 @@ def lexical_channel(requirement, resume, onto, bm25_norm, gamma=0.75):
                     else:
                         credit = gamma ** h
                         kind = "ontology"
-                    credit *= (0.7 + 0.3 * chunk.weight)
+                    credit *= (0.5 + 0.5 * chunk.weight)
                     if credit > best["score"]:
                         best = {"score": credit, "kind": kind, "term": jd_term, "matched": res_term, "hops": h, "chunk": chunk}
     bm = 0.6 * bm25_norm

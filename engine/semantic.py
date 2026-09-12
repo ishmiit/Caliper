@@ -28,7 +28,7 @@ def semantic_channel(req_vec, resume, chunk_vecs, top_k=3):
         return {"raw": 0.0, "evidence": []}
     cos = chunk_vecs @ req_vec
     weights = np.array([c.weight for c in resume.chunks], dtype=np.float32)
-    weighted = cos * (0.7 + 0.3 * weights)
+    weighted = cos * (0.5 + 0.5 * weights)
     order = np.argsort(-weighted)[:top_k]
     evidence = [{"chunk": resume.chunks[i], "cos": float(cos[i]), "score": float(weighted[i])} for i in order]
     return {"raw": float(weighted[order[0]]), "evidence": evidence}
