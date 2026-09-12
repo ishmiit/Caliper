@@ -49,8 +49,11 @@ class BM25:
 def lexical_channel(requirement, resume, onto, bm25_norm, gamma=0.75):
     """Returns lexical score in [0,1] plus the evidence chunk that produced it."""
     best = {"score": 0.0, "kind": "none", "term": None, "matched": None, "hops": None, "chunk": None}
+    negated = None
     if requirement.terms:
         for chunk in resume.chunks:
+            if chunk.section == "HEADER":
+                continue
             hits = chunk.__dict__.get("term_hits")
             if hits is None:
                 hits = chunk.term_hits = onto.terms_in_text(chunk.text.lower())
@@ -59,7 +62,13 @@ def lexical_channel(requirement, resume, onto, bm25_norm, gamma=0.75):
                     h = onto.hops(jd_term, res_term)
                     if h is None:
                         continue
-                    alias_used = occ[0][1]
+                    positive = [o for o in occ if o[2] != "neg"]
+                    if not positive:
+                        if h == 0 and negated is None:
+                            negated = {"term": jd_term, "matched": res_term, "chunk": chunk}
+                        continue
+                    hedged = all(o[2] == "hedge" for o in positive)
+                    alias_used = positive[0][1]
                     if h == 0:
                         credit = 1.0 if alias_used == jd_term or alias_used == onto.canonical(jd_term).lower() else 0.95
                         kind = "exact" if credit == 1.0 else "alias"
@@ -67,8 +76,13 @@ def lexical_channel(requirement, resume, onto, bm25_norm, gamma=0.75):
                         credit = gamma ** h
                         kind = "ontology"
                     credit *= (0.5 + 0.5 * chunk.weight)
+                    if hedged:
+                        credit *= 0.7
+                        kind = "hedged"
                     if credit > best["score"]:
                         best = {"score": credit, "kind": kind, "term": jd_term, "matched": res_term, "hops": h, "chunk": chunk}
+    if best["score"] == 0.0 and negated is not None:
+        return {"score": 0.0, "kind": "negated", "term": negated["term"], "matched": negated["matched"], "hops": 0, "chunk": negated["chunk"], "bm25_norm": round(bm25_norm, 3)}
     bm = 0.6 * bm25_norm
     if bm > best["score"]:
         best = {"score": bm, "kind": "bm25", "term": None, "matched": None, "hops": None, "chunk": _best_bm25_chunk(requirement, resume)}

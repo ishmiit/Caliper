@@ -2,31 +2,81 @@
   "gender_coded": {
     "label": "Gender-coded language",
     "severity": "high",
-    "terms": ["rockstar", "ninja", "guru", "aggressive", "dominant", "fearless", "he will", "his own", "salesman", "manpower", "chairman", "competitive"],
+    "terms": [
+      "rockstar",
+      "ninja",
+      "guru",
+      "aggressive",
+      "dominant",
+      "fearless",
+      "he will",
+      "his own",
+      "salesman",
+      "manpower",
+      "chairman",
+      "competitive"
+    ],
     "rewrite": "Use neutral descriptors such as 'skilled', 'motivated', or 'collaborative'."
   },
   "age_proxy": {
     "label": "Age proxy",
     "severity": "high",
-    "terms": ["young", "energetic", "digital native", "recent graduate only", "fresh graduate", "new grad only", "born after", "youthful"],
+    "terms": [
+      "young",
+      "energetic",
+      "digital native",
+      "recent graduate only",
+      "fresh graduate",
+      "new grad only",
+      "born after",
+      "youthful"
+    ],
     "rewrite": "Describe the required skills rather than the candidate's life stage."
   },
   "credential_inflation": {
     "label": "Credential gate",
     "severity": "medium",
-    "terms": ["tier-1", "tier 1", "iit", "nit", "top-tier institution", "cs degree required", "b.tech only", "70% throughout", "no backlogs", "cgpa above", "minimum cgpa", "computer science degree required"],
+    "terms": [
+      "tier-1",
+      "tier 1",
+      "iit",
+      "nit",
+      "top-tier institution",
+      "cs degree required",
+      "b.tech only",
+      "70% throughout",
+      "no backlogs",
+      "cgpa above",
+      "minimum cgpa",
+      "computer science degree required"
+    ],
     "rewrite": "Accept equivalent project or work experience in place of a specific institution or degree."
   },
   "culture_vagueness": {
     "label": "Vague culture-fit phrasing",
     "severity": "low",
-    "terms": ["culture fit", "work hard play hard", "like a family", "wear many hats", "hustle", "rockstar mentality", "go-getter"],
+    "terms": [
+      "culture fit",
+      "work hard play hard",
+      "like a family",
+      "wear many hats",
+      "hustle",
+      "rockstar mentality",
+      "go-getter",
+      "fast-paced"
+    ],
     "rewrite": "Replace with the concrete behaviour you expect, e.g. 'comfortable owning a feature end-to-end'."
   },
   "ability_coded": {
     "label": "Ability-coded language",
     "severity": "high",
-    "terms": ["able-bodied", "must be able to stand", "perfect vision", "flawless communication", "native english"],
+    "terms": [
+      "able-bodied",
+      "must be able to stand",
+      "perfect vision",
+      "flawless communication",
+      "native english"
+    ],
     "rewrite": "State the essential function, e.g. 'communicates clearly in writing and speech'."
   },
   "experience_contradiction": {

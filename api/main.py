@@ -186,12 +186,10 @@ def answer(msg: str):
         return {"text": "Hidden gems — candidates a keyword ATS would under-rank: " + "; ".join(parts) + ".", "citations": [{"candidate_id": c["candidate_id"]} for c in gems]}
 
     req_hit = None
-    for r in reqs:
-        for t in r.get("terms", []):
-            if t in low or r["label"].lower() in low:
-                req_hit = r
-                break
-        if req_hit:
+    ranked = sorted(reqs, key=lambda r: (0 if r["type"] == "hard_skill" else 1, len(r.get("terms", []))))
+    for r in ranked:
+        if r["label"].lower() in low or any(re.search(r"(?<![a-z])" + re.escape(t) + r"(?![a-z])", low) for t in r.get("terms", [])):
+            req_hit = r
             break
     if req_hit:
         if any(w in low for w in ("missing", "lack", "without", "doesn't", "does not", "no ")):

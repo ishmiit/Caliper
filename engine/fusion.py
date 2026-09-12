@@ -13,6 +13,7 @@ DEFAULT_CONFIG = {
     "w_nice": 1.0,
     "coverage_floor": 0.40,
     "max_penalty": 0.15,
+    "sem_raw_floor": 0.35,
 }
 
 
@@ -79,6 +80,9 @@ def build_graph(requirements, resumes, lex, sem_raw, sem_evidence, cfg):
     wsum = sum(weights) or 1.0
 
     S = [calibrate(sem_raw[ri], cfg["calibrate_on"]) for ri in range(R)]
+    floor = cfg.get("sem_raw_floor", 0.0)
+    if floor > 0:
+        S = [[s * min(1.0, sem_raw[ri][ci] / floor) for ci, s in enumerate(row)] for ri, row in enumerate(S)]
     L = [[(lex[ri][ci]["score"] if cfg["ontology_on"] or lex[ri][ci]["kind"] not in ("ontology",) else 0.6 * lex[ri][ci]["bm25_norm"]) for ci in range(C)] for ri in range(R)]
 
     def total(mode):
@@ -93,6 +97,13 @@ def build_graph(requirements, resumes, lex, sem_raw, sem_evidence, cfg):
                 elif mode == "sem":
                     verdict, fit = ("CONFIRMED", s) if s >= cfg["tau_sem"] else ("MISSING", 0.5 * s)
                 else:
+                    if lex[ri][ci].get("kind") == "negated":
+                        verdict, fit = "MISSING", 0.0
+                        if req.priority == "must_have":
+                            must_n += 1
+                        contribution = 0.0
+                        rows.append((verdict, fit, 0.0, s, contribution))
+                        continue
                     lx_chunk = lex[ri][ci].get("chunk")
                     sem_top = sem_evidence[ri][ci][0]["chunk"] if sem_evidence[ri][ci] else None
                     listed_only = (lx_chunk is not None and getattr(lx_chunk, "depth", "") == "listed") and (sem_top is None or getattr(sem_top, "depth", "") == "listed" or sem_evidence[ri][ci][0]["cos"] < cfg["tau_sem"])
@@ -124,6 +135,8 @@ def build_graph(requirements, resumes, lex, sem_raw, sem_evidence, cfg):
             verdict, fit, l, s, contribution = rows[ri]
             lx = lex[ri][ci]
             ev = []
+            if lx.get("kind") == "negated" and lx.get("chunk") is not None:
+                ev.append({"chunk_id": lx["chunk"].chunk_id, "line": lx["chunk"].line_no, "section": lx["chunk"].section, "depth": lx["chunk"].depth, "demonstrated": False, "method": "negated", "text": lx["chunk"].text, "score": 0.0, "term": lx.get("term"), "matched": lx.get("matched"), "hops": 0})
             if lx.get("chunk") is not None and l > 0:
                 ev.append({"chunk_id": lx["chunk"].chunk_id, "line": lx["chunk"].line_no, "section": lx["chunk"].section, "depth": lx["chunk"].depth, "demonstrated": lx["chunk"].demonstrated, "method": lx["kind"], "text": lx["chunk"].text, "score": round(l, 3), "term": lx.get("term"), "matched": lx.get("matched"), "hops": lx.get("hops")})
             for e in sem_evidence[ri][ci][:2]:
@@ -166,6 +179,10 @@ def _note(req, verdict, lx, s, cfg, months=0):
     months_txt = f"{months} months" if months < 24 else f"{months // 12} years"
     chunk = lx.get("chunk")
     depth = getattr(chunk, "depth", None) if chunk is not None else None
+    if lx.get("kind") == "negated":
+        return f"Resume states no experience with {lx['matched']}; not counted as evidence."
+    if lx.get("kind") == "hedged" and verdict in ("CONFIRMED", "STATED"):
+        return f"Described as basic or familiarity-level ('{lx['matched']}'); credit reduced 30%."
     if verdict == "STATED" and depth == "listed":
         return f"Listed under a skills or education heading only; never shown in use. Credit reduced."
     if verdict in ("CONFIRMED", "STATED") and depth == "listed" and lx.get("kind") in ("exact", "alias"):

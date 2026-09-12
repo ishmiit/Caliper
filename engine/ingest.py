@@ -18,6 +18,7 @@ DATE_RANGE = re.compile(
     rf"((?:{MONTHS})[a-z]*\.?\s*'?\d{{2,4}}|\d{{1,2}}/\d{{2,4}}|\b(?:19|20)\d{{2}}\b|present|current|now|ongoing|\d{{2}}\b)",
     re.I,
 )
+SHORT_RANGE = re.compile(rf"\b((?:{MONTHS})[a-z]*)\.?\s*(?:-|\u2013|\u2014|to)\s*((?:{MONTHS})[a-z]*|present|current|now)\.?\s*'?(\d{{2,4}})\b", re.I)
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 PHONE = re.compile(r"\+?\(?\d[\d\s\-()]{7,14}\d")
 
@@ -62,7 +63,21 @@ class Resume:
     duplicates: list = field(default_factory=list)
 
 
+CID = re.compile(r"\(cid:\d+\)")
+
+
+def clean_text(text: str):
+    text = CID.sub("• ", text)
+    text = text.replace("", "• ").replace("‣", "• ").replace("▪", "• ")
+    return text
+
+
 def extract_text(path: Path):
+    text, method = _extract_text(path)
+    return clean_text(text), method
+
+
+def _extract_text(path: Path):
     suffix = path.suffix.lower()
     if suffix in (".txt", ".md"):
         return path.read_text(encoding="utf-8", errors="ignore"), "text"
@@ -183,6 +198,16 @@ def classify_header(line: str):
 def normalize_dates(text: str):
     months = 0
     found = 0
+    for m in SHORT_RANGE.finditer(text):
+        found += 1
+        try:
+            y = _year(m.group(3))
+            a, b = _ym(f"{m.group(1)} {y}"), _ym(f"{m.group(2)} {y}")
+            if a and b and b >= a:
+                months += max(1, b - a + 1)
+        except Exception:
+            pass
+    text = SHORT_RANGE.sub(" ", text)
     for m in DATE_RANGE.finditer(text):
         found += 1
         try:

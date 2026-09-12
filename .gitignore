@@ -20,8 +20,6 @@ Thumbs.db
 # Large/local-only assets
 *.zip
 
-# Runtime data written by the app
-data/labels.json
 
 # Organiser pool (unzip Dummy Resumes zip here)
 data/pool/

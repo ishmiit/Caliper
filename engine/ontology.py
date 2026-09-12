@@ -6,6 +6,24 @@ from pathlib import Path
 GENERIC = {"projects", "programming language", "degree", "web framework", "collaboration", "communication", "problem solving", "api design", "architecture",
            "backend", "frontend", "full stack", "database", "web development", "internship", "cloud", "data", "testing", "deployment", "devops", "frontend framework", "mobile", "security", "state management"}
 SOFT = {"communication", "collaboration", "problem solving", "agile"}
+NEGATION = re.compile(r"\b(not|no|never|hasn'?t|haven'?t|has not|have not|without|lacks?|lacking|limited|minimal|yet to|unfamiliar|little|zero)\b", re.I)
+HEDGE = re.compile(r"\b(basic|basics|beginner|familiar(?:ity)? with|exposure to|some|introductory|learning|elementary)\b|\(basic\)", re.I)
+CLAUSE_BREAK = re.compile(r"[.;:!?]|\bbut\b|\bhowever\b|\balthough\b|\bwhile\b", re.I)
+
+
+def polarity(text_low, start, end):
+    """Return ('neg'|'hedge'|None) for a term occurrence based on its clause context."""
+    before = text_low[:start]
+    cut = [m.end() for m in CLAUSE_BREAK.finditer(before)]
+    clause = before[cut[-1]:] if cut else before
+    words_before = clause.split()[-8:]
+    window = " ".join(words_before)
+    after = text_low[end:end + 12]
+    if NEGATION.search(window):
+        return "neg"
+    if HEDGE.search(" ".join(words_before[-3:])) or HEDGE.search(after):
+        return "hedge"
+    return None
 
 
 class Ontology:
@@ -82,7 +100,7 @@ class Ontology:
         if resume_term in d:
             return d[resume_term]
         p = self.parents(jd_term, 1)
-        if resume_term in p:
+        if resume_term in p and resume_term not in GENERIC:
             return 2
         return None
 
@@ -93,5 +111,5 @@ class Ontology:
                 continue
             for m in self._patterns[a].finditer(text_low):
                 k = self.alias_to_key[a]
-                hits.setdefault(k, []).append((m.start(), a))
+                hits.setdefault(k, []).append((m.start(), a, polarity(text_low, m.start(), m.end())))
         return hits

@@ -19,6 +19,14 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
 
+def default_pool():
+    for name in ("judged", "resumes"):
+        p = DATA / name
+        if p.exists() and any(p.iterdir()):
+            return p
+    return DATA / "resumes"
+
+
 class Session:
     def __init__(self):
         self.onto = Ontology(DATA / "skill_ontology.json")
@@ -57,7 +65,7 @@ class Session:
         if resume_paths is not None:
             self.resumes = [parse_resume(Path(p), f"r{i+1:02d}") for i, p in enumerate(resume_paths)]
         else:
-            self.resumes = load_resumes(resume_folder or DATA / "resumes")
+            self.resumes = load_resumes(resume_folder or default_pool())
         n_chunks = sum(len(r.chunks) for r in self.resumes)
         fuzzy = sum(r.fuzzy_headers for r in self.resumes)
         headers = sum(len(r.sections) for r in self.resumes)
@@ -180,7 +188,7 @@ class Session:
         base_rank = {c["candidate_id"]: c["rank"] for c in self.graph["candidates"]}
         saved = (self.jd_text, self.jd_title, self.requirements, self.req_vecs, self.lex, self.sem_raw, self.sem_ev, list(self.log))
         for f in flags:
-            touched = [r for r in self.requirements if f["phrase"].lower() in r.text.lower()]
+            touched = [r for r in self.requirements if f["phrase"].lower() in r.text.lower() and r.priority == "must_have"]
             if touched:
                 rejects = []
                 for c in self.graph["candidates"]:

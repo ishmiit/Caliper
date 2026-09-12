@@ -6,6 +6,7 @@ import numpy as np
 DEPTH_WEIGHT = {"professional": 1.0, "internship": 0.9, "project": 0.8, "listed": 0.55}
 DEPTH_LABEL = {"professional": "professional experience", "internship": "internship", "project": "project", "listed": "listed only"}
 
+ROLE_LINE = re.compile(r"\b(19|20)\d{2}\b|present|current", re.I)
 ACTION_VERBS = re.compile(r"\b(built|shipped|deployed|developed|implemented|designed|led|owned|migrated|optimi[sz]ed|architected|integrated|automated|launched|maintained|scaled|reduced|increased)\b", re.I)
 INTERN_ROLE = re.compile(r"\b(intern|internship|trainee|apprentice|summer analyst)\b", re.I)
 
@@ -50,9 +51,11 @@ def assign_depth(resume):
         else:
             tier = "listed"
         demonstrated = bool(ACTION_VERBS.search(c.text)) and tier != "listed"
+        role_line = tier != "listed" and ROLE_LINE.search(c.text) and len(c.text.split()) <= 14 and not demonstrated
         c.depth = tier
         c.demonstrated = demonstrated
-        c.weight = DEPTH_WEIGHT[tier] * (1.0 if demonstrated or tier == "listed" else 0.94)
+        c.role_line = bool(role_line)
+        c.weight = DEPTH_WEIGHT[tier] * (0.6 if role_line else 1.0 if demonstrated or tier == "listed" else 0.94)
 
 
 def strip_injections(resume):

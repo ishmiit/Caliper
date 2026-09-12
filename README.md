@@ -14,6 +14,19 @@ start.bat                              # backend :8000 + frontend :5173
 
 First backend start takes ~20s (loads MiniLM). After that a full run over 18 resumes is ~3s.
 
+## The judged pool
+
+`data/judged/` holds the 18 organiser resumes and `data/Sample_JD.pdf` the real brief; `data/labels.json` labels them from their own summaries (5 strong · 8 partial · 5 non-web). The API defaults to this pool. Measured:
+
+| Configuration | nDCG@5 | Spearman ρ | Spread |
+|---|---|---|---|
+| Keyword only | 0.925 | 0.891 | 55 |
+| Semantic only | 0.925 | 0.848 | 46 |
+| **Fused (Caliper)** | **1.000** | **0.905** | **65** |
+| Fused − calibration | 0.925 | 0.891 | 59 |
+
+The five full-stack candidates are the top five; the five non-web candidates are the bottom five. Blind re-rank shifts scores by 0.01. See `API.md` for the endpoint contract.
+
 ## On the day
 
 1. Drop the 18 PDFs into `data/resumes/` (PDFs take precedence over the synthetic `.txt` samples) and `Sample_JD.pdf` into `data/`.
